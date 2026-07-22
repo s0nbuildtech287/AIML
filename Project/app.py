@@ -12,20 +12,34 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import uvicorn
 
-# Thư viện Scikit-Learn
-from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, f1_score, confusion_matrix
-from sklearn.cluster import KMeans
+try:
+    from sklearn.linear_model import LinearRegression
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, f1_score, confusion_matrix
+    from sklearn.cluster import KMeans
+except Exception:
+    pass
 
 app = FastAPI(title="AI/ML Interactive Visualizer & Playground")
 
 # Lấy đường dẫn thư mục hiện tại của file app.py
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Thiết lập thư mục chứa file tĩnh và templates
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+static_dir = os.path.join(BASE_DIR, "static")
+template_dir = os.path.join(BASE_DIR, "templates")
+
+if not os.path.exists(static_dir):
+    cwd = os.getcwd()
+    alt_static = os.path.join(cwd, "Project", "static")
+    alt_template = os.path.join(cwd, "Project", "templates")
+    if os.path.exists(alt_static):
+        static_dir = alt_static
+        template_dir = alt_template
+
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+templates = Jinja2Templates(directory=template_dir)
 
 @app.get("/", response_class=HTMLResponse)
 @app.get("/mindmap", response_class=HTMLResponse)
@@ -34,7 +48,7 @@ async def read_root(request: Request):
 
 @app.get("/tabs/{tab_name}", response_class=HTMLResponse)
 async def get_tab(tab_name: str, request: Request):
-    tab_file = os.path.join(BASE_DIR, "templates", "tabs", f"tab-{tab_name}.html")
+    tab_file = os.path.join(template_dir, "tabs", f"tab-{tab_name}.html")
     if not os.path.exists(tab_file):
         return HTMLResponse(content="Giao diện tab không tồn tại", status_code=404)
     return templates.TemplateResponse(f"tabs/tab-{tab_name}.html", {"request": request})
