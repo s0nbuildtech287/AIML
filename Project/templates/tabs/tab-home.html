@@ -245,7 +245,13 @@
         color: var(--c-ml);
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
+        .dashboard-grid-7 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (max-width: 1024px) {
         .dashboard-grid-7 {
             grid-template-columns: repeat(3, 1fr);
         }
@@ -253,7 +259,33 @@
 
     @media (max-width: 768px) {
         .dashboard-grid-7 {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .mindmap-header h2 {
+            font-size: 16px;
+        }
+        .modal-card {
+            width: 95vw;
+            padding: 16px 14px;
+            max-height: 85vh;
+        }
+        .modal-concept-title {
+            font-size: 15px;
+        }
+        .modal-diagram-box {
+            font-size: 9px;
+            padding: 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-grid-7 {
             grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .mindmap-header h2 {
+            font-size: 14px;
         }
     }
 </style>
