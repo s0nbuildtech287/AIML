@@ -20,16 +20,12 @@ let gdIntervalId = null;
 // =====================================================================
 
 async function switchTab(tabId) {
-    // Xóa class active ở tất cả các nút
+    // Cập nhật nút active ngay lập tức (đồng bộ)
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.classList.remove("active");
     });
-    
-    // Kích hoạt class active cho nút tab được chọn
     const activeBtn = document.getElementById(`btn-${tabId}`);
-    if (activeBtn) {
-        activeBtn.classList.add("active");
-    }
+    if (activeBtn) activeBtn.classList.add("active");
 
     const nav = document.querySelector(".tab-nav");
     if (nav && tabId === "home") nav.scrollLeft = 0;
@@ -47,6 +43,14 @@ async function switchTab(tabId) {
     else if (tabId === "agent") badge.innerText = "Lesson 23-24: AI Agent Hub";
     else if (tabId === "finetune") badge.innerText = "Lesson 25: Fine-tuning Lab";
     else if (tabId === "mlops") badge.innerText = "Lesson 26-28: MLOps & Production";
+
+    // Tab Home: khôi phục nội dung từ cache — KHÔNG fetch
+    if (tabId === "home") {
+        if (window._homeHtml) {
+            document.getElementById("active-tab-content").innerHTML = window._homeHtml;
+        }
+        return;
+    }
 
     try {
         const container = document.getElementById("active-tab-content");
