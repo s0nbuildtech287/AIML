@@ -64,27 +64,26 @@ h1 {
     overflow-x: auto;
     padding-bottom: 8px;
     margin-bottom: 20px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
 }
 
 .tab-nav::-webkit-scrollbar {
-    height: 4px;
-    background: transparent;
+    height: 5px;
+}
+
+.tab-nav::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
 }
 
 .tab-nav::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 4px;
-    transition: background 0.3s;
+    background: linear-gradient(90deg, #38bdf8, #c084fc, #f472b6);
+    border-radius: 6px;
 }
 
-.tab-nav:hover {
-    scrollbar-width: thin;
-}
-
-.tab-nav:hover::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+.tab-nav::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #0284c7, #9333ea, #db2777);
 }
 
 .tab-btn {
