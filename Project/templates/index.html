@@ -47,6 +47,13 @@
     <!-- Script điều hướng trung tâm và logic xử lý -->
     <script src="/static/js/main.js"></script>
     <script>
+        // Đặt trạng thái active ngay lập tức (đồng bộ) trước khi switchTab async fetch nội dung
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        var homeBtn = document.getElementById('btn-home');
+        if (homeBtn) homeBtn.classList.add('active');
+        var badge = document.getElementById('brand-badge-text');
+        if (badge) badge.innerText = 'Full Roadmap (Bài 1-34)';
+        // Gọi async để nạp nội dung tab home
         switchTab('home');
     </script>
 </body>

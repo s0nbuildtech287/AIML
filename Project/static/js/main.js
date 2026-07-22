@@ -1138,12 +1138,7 @@ function closeModal(event) {
     if (modal) modal.style.display = "none";
 }
 
+// Lắng nghe phím ESC để đóng modal
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
 });
-
-// Tự động tải Home tab khi vừa mở trang
-document.addEventListener("DOMContentLoaded", () => {
-    switchTab("home");
-});
-
