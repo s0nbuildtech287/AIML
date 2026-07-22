@@ -1,0 +1,529 @@
+<style>
+    :root {
+        --c-foundations: #38bdf8;
+        --c-ml: #4ade80;
+        --c-deep: #c084fc;
+        --c-llm: #fb923c;
+        --c-rag: #facc15;
+        --c-ops: #2dd4bf;
+        --c-prod: #f472b6;
+    }
+
+    .mindmap-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .mindmap-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        background: linear-gradient(to right, #38bdf8, #c084fc, #f472b6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .mindmap-header p {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+
+    .dashboard-grid-7 {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 12px;
+        align-items: start;
+    }
+
+    .pillar-col {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        backdrop-filter: blur(8px);
+    }
+
+    .pillar-header {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-align: center;
+        padding: 6px 0;
+        border-bottom: 2px solid;
+        letter-spacing: 0.5px;
+    }
+
+    .pillar-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .concept-card {
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 10px;
+        line-height: 1.4;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .concept-card:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.03);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .concept-title {
+        font-weight: 600;
+        font-size: 10.5px;
+        margin-bottom: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .concept-title span.id {
+        opacity: 0.5;
+        font-size: 8.5px;
+        font-weight: 400;
+    }
+
+    .concept-detail {
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+
+    .col-foundations .pillar-header { border-color: var(--c-foundations); color: var(--c-foundations); }
+    .col-foundations .concept-card:hover { border-color: var(--c-foundations); }
+    .col-foundations .concept-title { color: var(--c-foundations); }
+    
+    .col-ml .pillar-header { border-color: var(--c-ml); color: var(--c-ml); }
+    .col-ml .concept-card:hover { border-color: var(--c-ml); }
+    .col-ml .concept-title { color: var(--c-ml); }
+    
+    .col-deep .pillar-header { border-color: var(--c-deep); color: var(--c-deep); }
+    .col-deep .concept-card:hover { border-color: var(--c-deep); }
+    .col-deep .concept-title { color: var(--c-deep); }
+    
+    .col-llm .pillar-header { border-color: var(--c-llm); color: var(--c-llm); }
+    .col-llm .concept-card:hover { border-color: var(--c-llm); }
+    .col-llm .concept-title { color: var(--c-llm); }
+    
+    .col-rag .pillar-header { border-color: var(--c-rag); color: var(--c-rag); }
+    .col-rag .concept-card:hover { border-color: var(--c-rag); }
+    .col-rag .concept-title { color: var(--c-rag); }
+    
+    .col-ops .pillar-header { border-color: var(--c-ops); color: var(--c-ops); }
+    .col-ops .concept-card:hover { border-color: var(--c-ops); }
+    .col-ops .concept-title { color: var(--c-ops); }
+
+    .col-prod .pillar-header { border-color: var(--c-prod); color: var(--c-prod); }
+    .col-prod .concept-card:hover { border-color: var(--c-prod); }
+    .col-prod .concept-title { color: var(--c-prod); }
+
+    /* Modal Overlay */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(3, 7, 18, 0.85);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-card {
+        background: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        width: 95%;
+        max-width: 720px;
+        max-height: 90vh;
+        padding: 25px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        overflow-y: auto;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .modal-close-btn:hover {
+        color: #fff;
+    }
+
+    .modal-header-section {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .modal-badge {
+        font-size: 10px;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 3px 8px;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+        border: 1px solid transparent;
+    }
+
+    .modal-concept-title {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .modal-body-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .modal-info-block h3 {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #f1f5f9;
+    }
+
+    .modal-info-block p {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+
+    .modal-info-block pre {
+        background: #030712;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        padding: 10px 14px;
+        overflow-x: auto;
+        margin-top: 4px;
+    }
+
+    .modal-info-block code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px;
+        color: #38bdf8;
+    }
+
+    .modal-diagram-box {
+        background: #020617;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 6px;
+        padding: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        color: var(--c-ml);
+    }
+
+    @media (max-width: 1200px) {
+        .dashboard-grid-7 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-grid-7 {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="mindmap-header">
+    <h2>Sơ Đồ Tư Duy Lộ Trình 34 Bài Học AI Engineer</h2>
+    <p>Nhấp vào bất kỳ thẻ kiến thức nào bên dưới để xem chi tiết bản chất, ví dụ code và sơ đồ luồng</p>
+</div>
+
+<div class="dashboard-grid-7">
+    <!-- Cột 1: Dữ liệu & Toán -->
+    <div class="pillar-col col-foundations">
+        <div class="pillar-header">1. Dữ liệu & Toán</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('numpy')">
+                <div class="concept-title">NumPy <span class="id">Bài 1</span></div>
+                <div class="concept-detail">💡 Mảng & ma trận hiệu năng cao.</div>
+                <div class="concept-detail">🎯 Khi tính toán vector số lượng lớn.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('pandas')">
+                <div class="concept-title">Pandas <span class="id">Bài 2</span></div>
+                <div class="concept-detail">💡 Thao tác dữ liệu dạng bảng.</div>
+                <div class="concept-detail">🎯 Khi lọc, nhóm và thống kê dữ liệu.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('cleaning')">
+                <div class="concept-title">Data Cleaning <span class="id">Bài 3</span></div>
+                <div class="concept-detail">💡 Dọn dẹp ô trống, loại bỏ trùng dòng.</div>
+                <div class="concept-detail">🎯 Khi xử lý và làm sạch dữ liệu thô.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('eda')">
+                <div class="concept-title">EDA & Plotting <span class="id">Bài 4</span></div>
+                <div class="concept-detail">💡 Khám phá phân phối & tương quan.</div>
+                <div class="concept-detail">🎯 Khi tìm hiểu hành vi của thuộc tính.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('gradient')">
+                <div class="concept-title">Gradient Descent <span class="id">Bài 5</span></div>
+                <div class="concept-detail">💡 Tối ưu hóa trọng số dựa trên đạo hàm.</div>
+                <div class="concept-detail">🎯 Khi huấn luyện tìm cực trị hàm loss.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('feature')">
+                <div class="concept-title">Feature Engineering <span class="id">Bài 9</span></div>
+                <div class="concept-detail">💡 Mã hóa & chuẩn hóa dữ liệu.</div>
+                <div class="concept-detail">🎯 Khi đồng đều thang đo/chữ ➔ số.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cột 2: Học máy cổ điển -->
+    <div class="pillar-col col-ml">
+        <div class="pillar-header">2. ML Cổ điển</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('linear')">
+                <div class="concept-title">Linear Regression <span class="id">Bài 6</span></div>
+                <div class="concept-detail">💡 Dự đoán giá trị số thực liên tục.</div>
+                <div class="concept-detail">🎯 Khi dự đoán giá nhà, doanh số.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('logistic')">
+                <div class="concept-title">Logistic Regression <span class="id">Bài 6</span></div>
+                <div class="concept-detail">💡 Phân loại xác suất nhị phân.</div>
+                <div class="concept-detail">🎯 Khi quyết định nhãn Có/Không.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('tree')">
+                <div class="concept-title">Decision Tree <span class="id">Bài 7</span></div>
+                <div class="concept-detail">💡 Phân nhánh cây điều kiện If-Else.</div>
+                <div class="concept-detail">🎯 Khi cần mô hình trực quan dễ đọc.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('forest')">
+                <div class="concept-title">Random Forest <span class="id">Bài 7</span></div>
+                <div class="concept-detail">💡 Tổ hợp nhiều cây ngẫu nhiên.</div>
+                <div class="concept-detail">🎯 Tăng độ chính xác & chống overfitting.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('evaluation')">
+                <div class="concept-title">Model Evaluation <span class="id">Bài 8</span></div>
+                <div class="concept-detail">💡 Chỉ số đánh giá (Accuracy, F1).</div>
+                <div class="concept-detail">🎯 Khi đo lường hiệu năng mô hình.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('kmeans_pca')">
+                <div class="concept-title">K-Means & PCA <span class="id">Bài 10</span></div>
+                <div class="concept-detail">💡 Phân cụm & giảm số chiều.</div>
+                <div class="concept-detail">🎯 Gom nhóm không nhãn / vẽ 2D.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cột 3: Mạng Neural & Deep Learning -->
+    <div class="pillar-col col-deep">
+        <div class="pillar-header">3. Deep Learning</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('mlp')">
+                <div class="concept-title">Perceptron & MLP <span class="id">Bài 11</span></div>
+                <div class="concept-detail">💡 Nơ-ron & lớp liên kết đầy đủ.</div>
+                <div class="concept-detail">🎯 Khi học các hàm phi tuyến phức tạp.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('pytorch')">
+                <div class="concept-title">PyTorch Basics <span class="id">Bài 12</span></div>
+                <div class="concept-detail">💡 Đồ thị động & lan truyền ngược.</div>
+                <div class="concept-detail">🎯 Khi lập trình mạng nơ-ron trên GPU.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('cnn')">
+                <div class="concept-title">CNN <span class="id">Bài 13</span></div>
+                <div class="concept-detail">💡 Tích chập trích xuất đặc trưng ảnh.</div>
+                <div class="concept-detail">🎯 Phân loại ảnh, nhận diện vật thể.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('rnn')">
+                <div class="concept-title">RNN & LSTM <span class="id">Bài 14</span></div>
+                <div class="concept-detail">💡 Mạng tuần tự có bộ nhớ ngữ cảnh.</div>
+                <div class="concept-detail">🎯 Khi xử lý chuỗi thời gian/văn bản.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('attention')">
+                <div class="concept-title">Attention <span class="id">Bài 14</span></div>
+                <div class="concept-detail">💡 Cơ chế tập trung trọng số chú ý.</div>
+                <div class="concept-detail">🎯 Khi chuỗi quá dài bị mất ngữ cảnh.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('transformer')">
+                <div class="concept-title">Transformer <span class="id">Bài 15</span></div>
+                <div class="concept-detail">💡 Kiến trúc tự chú ý song song.</div>
+                <div class="concept-detail">🎯 Nền tảng xây dựng mô hình LLM.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cột 4: LLM & Fine-tuning -->
+    <div class="pillar-col col-llm">
+        <div class="pillar-header">4. LLM & Fine-tune</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('prompt')">
+                <div class="concept-title">Prompt Engineering <span class="id">Bài 16</span></div>
+                <div class="concept-detail">💡 Kỹ thuật Zero, Few-shot & CoT.</div>
+                <div class="concept-detail">🎯 Khi cần dẫn dắt LLM giải bài toán.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('structured')">
+                <div class="concept-title">Structured Output <span class="id">Bài 17</span></div>
+                <div class="concept-detail">💡 Ép LLM trả về JSON Schema chuẩn.</div>
+                <div class="concept-detail">🎯 Khi kết nối dữ liệu LLM vào code backend.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('lora')">
+                <div class="concept-title">PEFT LoRA <span class="id">Bài 25</span></div>
+                <div class="concept-detail">💡 Fine-tuning ma trận rank thấp.</div>
+                <div class="concept-detail">🎯 Khi tinh chỉnh LLM trên GPU cá nhân.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cột 5: Kiến trúc RAG -->
+    <div class="pillar-col col-rag">
+        <div class="pillar-header">5. Kiến trúc RAG</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('embedding')">
+                <div class="concept-title">Embeddings <span class="id">Bài 18</span></div>
+                <div class="concept-detail">💡 Vector hóa ngữ nghĩa văn bản.</div>
+                <div class="concept-detail">🎯 Khi so khớp ngữ nghĩa câu/tài liệu.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('vectordb')">
+                <div class="concept-title">Vector Database <span class="id">Bài 19</span></div>
+                <div class="concept-detail">💡 CSDL lưu trữ & tìm kiếm vector.</div>
+                <div class="concept-detail">🎯 Truy vấn tương đồng triệu tài liệu.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('chunking')">
+                <div class="concept-title">Chunking <span class="id">Bài 20</span></div>
+                <div class="concept-detail">💡 Cắt nhỏ và nạp tài liệu.</div>
+                <div class="concept-detail">🎯 Chuẩn bị dữ liệu tránh tràn context.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('advrag')">
+                <div class="concept-title">Advanced RAG <span class="id">Bài 21</span></div>
+                <div class="concept-detail">💡 Cải tiến truy xuất với Re-ranking.</div>
+                <div class="concept-detail">🎯 Khi tìm kiếm vector bị nhiễu.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('rageval')">
+                <div class="concept-title">RAG Evaluation <span class="id">Bài 22</span></div>
+                <div class="concept-detail">💡 Đo lường Faithfulness, Relevance.</div>
+                <div class="concept-detail">🎯 Khi cần kiểm soát ảo giác chatbot.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cột 6: Agent & MLOps -->
+    <div class="pillar-col col-ops">
+        <div class="pillar-header">6. Agent & MLOps</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('funcall')">
+                <div class="concept-title">Function Calling <span class="id">Bài 23</span></div>
+                <div class="concept-detail">💡 LLM xuất lệnh gọi hàm ngoại vi.</div>
+                <div class="concept-detail">🎯 Khi kết nối LLM với DB/API.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('agent')">
+                <div class="concept-title">AI Agents <span class="id">Bài 24</span></div>
+                <div class="concept-detail">💡 Tự lập kế hoạch & dùng tool (ReAct).</div>
+                <div class="concept-detail">🎯 Khi giải bài toán đa bước phức tạp.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('serve')">
+                <div class="concept-title">Serve API & SSE <span class="id">Bài 26</span></div>
+                <div class="concept-detail">💡 Tạo API & stream chữ chạy.</div>
+                <div class="concept-detail">🎯 Build app chat real-time như ChatGPT.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('docker')">
+                <div class="concept-title">Docker & Cloud <span class="id">Bài 27</span></div>
+                <div class="concept-detail">💡 Đóng gói container & deploy.</div>
+                <div class="concept-detail">🎯 Đưa ứng dụng lên cloud đồng nhất.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('tracing')">
+                <div class="concept-title">Tracing <span class="id">Bài 28</span></div>
+                <div class="concept-detail">💡 Giám sát & debug chuỗi gọi LLM.</div>
+                <div class="concept-detail">🎯 Đếm token & tìm bottleneck.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cột 7: Production Skills -->
+    <div class="pillar-col col-prod">
+        <div class="pillar-header">7. Production Skills</div>
+        <div class="pillar-content">
+            <div class="concept-card" onclick="openModal('langchain')">
+                <div class="concept-title">LangChain <span class="id">Bài 29</span></div>
+                <div class="concept-detail">💡 Framework xây chuỗi & Agent đồ thị.</div>
+                <div class="concept-detail">🎯 Xây RAG chain & Agent phức tạp.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('memory')">
+                <div class="concept-title">Multi-turn Memory <span class="id">Bài 30</span></div>
+                <div class="concept-detail">💡 Quản lý lịch sử bộ nhớ hội thoại.</div>
+                <div class="concept-detail">🎯 Khi chatbot cần nhớ ngữ cảnh đa lượt.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('security')">
+                <div class="concept-title">AI Security <span class="id">Bài 31</span></div>
+                <div class="concept-detail">💡 Bảo vệ khỏi Prompt Injection.</div>
+                <div class="concept-detail">🎯 Chống tấn công khi go-live sản phẩm.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('cost')">
+                <div class="concept-title">Cost & Caching <span class="id">Bài 32</span></div>
+                <div class="concept-detail">💡 Tối ưu chi phí API & Semantic Cache.</div>
+                <div class="concept-detail">🎯 Tái sử dụng câu trả lời tương đồng.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('testing')">
+                <div class="concept-title">AI Testing & CI/CD <span class="id">Bài 33</span></div>
+                <div class="concept-detail">💡 Unit test prompt & LLM-as-a-judge.</div>
+                <div class="concept-detail">🎯 Đảm bảo chất lượng khi đổi model.</div>
+            </div>
+            <div class="concept-card" onclick="openModal('multimodal')">
+                <div class="concept-title">Multi-modal AI <span class="id">Bài 34</span></div>
+                <div class="concept-detail">💡 Phân tích ảnh, âm thanh & PDF.</div>
+                <div class="concept-detail">🎯 Đọc hóa đơn, ảnh sản phẩm, Whisper.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal chi tiết bài học -->
+<div id="detail-modal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        <span class="modal-close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-header-section">
+            <span id="modal-concept-id" class="modal-badge">BÀI 1</span>
+            <h2 id="modal-concept-title">NumPy</h2>
+        </div>
+        <div class="modal-body-section">
+            <div class="modal-info-block">
+                <h3>💡 Bản chất & Định nghĩa trực quan</h3>
+                <p id="modal-def">Mảng và ma trận...</p>
+            </div>
+            <div class="modal-info-block">
+                <h3>🎯 Khi nào nên dùng?</h3>
+                <p id="modal-usecase">Khi cần...</p>
+            </div>
+            <div class="modal-info-block">
+                <h3>💻 Code ví dụ chú giải chi tiết</h3>
+                <pre><code id="modal-code">import numpy as np</code></pre>
+            </div>
+            <div class="modal-info-block">
+                <h3>📊 Sơ đồ luồng kiến thức</h3>
+                <div id="modal-diagram" class="modal-diagram-box"></div>
+            </div>
+        </div>
+    </div>
+</div>

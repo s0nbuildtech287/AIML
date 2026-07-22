@@ -1,0 +1,52 @@
+<div class="grid-layout">
+    <!-- Left Column: Tool Specs & Input -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: Tool List -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--accent);">
+                Công cụ của Agent (Tools List)
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 11.5px;">
+                <div style="background: rgba(255,255,255,0.02); padding: 8px; border-radius: 4px; border-left: 3px solid var(--primary);">
+                    <strong style="color: var(--primary);">check_order_db(order_id)</strong>
+                    <div style="color: var(--text-muted); font-size:10.5px;">Tra cứu giá trị và mặt hàng trong cơ sở dữ liệu đơn hàng.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding: 8px; border-radius: 4px; border-left: 3px solid var(--success);">
+                    <strong style="color: var(--success);">calculate_discount(price, rate)</strong>
+                    <div style="color: var(--text-muted); font-size:10.5px;">Tính toán số tiền sau khi áp dụng mã giảm giá.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding: 8px; border-radius: 4px; border-left: 3px solid var(--warning);">
+                    <strong style="color: var(--warning);">check_delivery_status(order_id)</strong>
+                    <div style="color: var(--text-muted); font-size:10.5px;">Tra cứu trạng thái vận chuyển của đơn hàng.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Run Agent -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Yêu Cầu Nhiệm Vụ (User Command)
+            </div>
+            <div class="input-group">
+                <label>Nhập lệnh phức tạp đòi hỏi nhiều bước xử lý</label>
+                <textarea id="agent-command-input" class="input-control" rows="3" style="font-family: inherit; font-size: 13px;">Hãy tra cứu thông tin đơn hàng DH102, kiểm tra xem nó đã giao chưa và tính giúp tôi số tiền khách phải trả sau khi giảm giá 15%.</textarea>
+            </div>
+            <button class="btn" style="background-color: var(--accent);" onclick="runAgentSimulation()">
+                <span>Kích Hoạt Agent (Run ReAct Loop)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Column: ReAct terminal logs -->
+    <div class="visual-container">
+        <div class="visual-card" style="flex: 1; display: flex; flex-direction: column;">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                ⚙️ Nhật Ký Tư Duy & Gọi Tool Của Agent (ReAct Loop Log)
+            </h3>
+            <div class="console-box" id="agent-terminal-log" style="flex: 1; background: #020617; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; line-height: 1.6; min-height: 250px; color: #38bdf8;">
+                # Đang chờ lệnh kích hoạt Agent...
+            </div>
+        </div>
+    </div>
+</div>

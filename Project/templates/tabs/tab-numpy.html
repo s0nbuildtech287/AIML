@@ -1,0 +1,117 @@
+<div class="grid-layout">
+    <!-- Left Side Control Column -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Section 1: Benchmark Vectorization -->
+        <div class="panel">
+            <div class="panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Đo đạc hiệu năng Vectorization
+            </div>
+            <div class="input-group">
+                <label>Số lượng phần tử cộng mảng (N)</label>
+                <input type="number" id="bench-n" class="input-control" value="1000000" min="1000" max="10000000">
+            </div>
+            <button class="btn" onclick="runBenchmark()">
+                <span>Chạy đo đạc</span>
+            </button>
+            <div class="result-card">
+                <div class="result-title">Tốc độ vượt trội của NumPy</div>
+                <div class="result-value" id="bench-speedup">--</div>
+            </div>
+        </div>
+
+        <!-- Section 2: Euclidean Distance -->
+        <div class="panel">
+            <div class="panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                Tính khoảng cách Euclid
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="input-group">
+                    <label>Vector A (x1, x2, x3)</label>
+                    <input type="text" id="vec-a" class="input-control" value="1, 2, 3">
+                </div>
+                <div class="input-group">
+                    <label>Vector B (y1, y2, y3)</label>
+                    <input type="text" id="vec-b" class="input-control" value="4, 6, 8">
+                </div>
+            </div>
+            <button class="btn" onclick="runEuclidean()">
+                <span>Tính khoảng cách</span>
+            </button>
+            <div class="result-card">
+                <div class="result-title">Khoảng cách Euclid (d)</div>
+                <div class="result-value" id="euclidean-result">--</div>
+            </div>
+        </div>
+
+        <!-- Section 3: Min-Max Scaling -->
+        <div class="panel">
+            <div class="panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                Chuẩn hóa dữ liệu Min-Max
+            </div>
+            <div class="input-group">
+                <label>Chuỗi số cần chuẩn hóa (cách nhau bởi dấu phẩy)</label>
+                <input type="text" id="scale-input" class="input-control" value="10, 20, 30, 40, 50">
+            </div>
+            <button class="btn" onclick="runMinMax()">
+                <span>Chuẩn hóa Min-Max</span>
+            </button>
+            <div class="result-card">
+                <div class="result-title">Mảng đầu ra chuẩn hóa [0, 1]</div>
+                <div class="result-value" id="minmax-result" style="font-size: 13.5px; word-break: break-all;">--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side Visualization Column -->
+    <div class="visual-container">
+        <div class="visual-card">
+            <h3 style="font-size: 14px; color: var(--primary); margin-bottom: 12px;">Đồ thị so sánh thời gian thực thi (giây)</h3>
+            <div class="bar-container">
+                <div class="bar-row">
+                    <div class="bar-label">For Loop</div>
+                    <div class="bar-outer">
+                        <div id="bar-loop" class="bar-inner" style="background: var(--error);"></div>
+                    </div>
+                    <div id="text-loop-time" style="font-size: 12px; font-family: monospace; width: 80px;">0.00s</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">NumPy</div>
+                    <div class="bar-outer">
+                        <div id="bar-numpy" class="bar-inner" style="background: var(--success);"></div>
+                    </div>
+                    <div id="text-numpy-time" style="font-size: 12px; font-family: monospace; width: 80px;">0.00s</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-card" style="flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative;">
+            <h3 style="font-size: 14px; color: var(--accent); margin-bottom: 12px;">Trực quan hóa Khoảng cách Euclid (3D chiếu lên trục 2D)</h3>
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; border-radius: 8px; overflow: hidden; min-height: 200px;">
+                <svg id="coordinate-svg" width="400" height="200" style="background:#020617;">
+                    <line x1="50" y1="150" x2="350" y2="150" stroke="#1e293b" stroke-width="1"></line>
+                    <line x1="50" y1="50" x2="50" y2="150" stroke="#1e293b" stroke-width="1"></line>
+                    <text x="45" y="155" fill="var(--text-muted)" font-size="10" text-anchor="end">0</text>
+                    <text x="350" y="165" fill="var(--text-muted)" font-size="10" text-anchor="middle">X</text>
+                    <text x="35" y="55" fill="var(--text-muted)" font-size="10" text-anchor="end">Y</text>
+                    <line id="vector-line" x1="50" y1="150" x2="50" y2="150" stroke="var(--accent)" stroke-width="3" stroke-dasharray="5,5" style="transition: all 1s ease;"></line>
+                    <circle id="point-a-dot" cx="50" cy="150" r="6" fill="var(--primary)" style="transition: all 1s ease;"></circle>
+                    <text id="point-a-text" x="50" y="150" fill="var(--text-main)" font-size="11" dx="10" dy="-10" style="transition: all 1s ease;">A</text>
+                    <circle id="point-b-dot" cx="50" cy="150" r="6" fill="var(--success)" style="transition: all 1s ease;"></circle>
+                    <text id="point-b-text" x="50" y="150" fill="var(--text-main)" font-size="11" dx="10" dy="-10" style="transition: all 1s ease;">B</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="visual-card">
+            <h3 style="font-size: 14px; color: var(--success); margin-bottom: 4px;">Trực quan hóa Phân phối sau chuẩn hóa Min-Max</h3>
+            <div class="scale-axis" id="scale-axis-container">
+                <div style="position: absolute; left: 0%; bottom:-20px; font-size:10px; color:var(--text-muted);">0.0 (Min)</div>
+                <div style="position: absolute; left: 50%; bottom:-20px; font-size:10px; color:var(--text-muted); transform: translateX(-50%);">0.5</div>
+                <div style="position: absolute; left: 100%; bottom:-20px; font-size:10px; color:var(--text-muted); transform: translateX(-100%);">1.0 (Max)</div>
+            </div>
+        </div>
+    </div>
+</div>

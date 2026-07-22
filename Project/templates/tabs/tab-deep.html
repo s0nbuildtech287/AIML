@@ -1,0 +1,119 @@
+<div class="grid-layout">
+    <!-- Left Column: Controls & Canvas -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: MNIST Canvas -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--accent);">
+                Bản Vẽ MNIST (Chữ Số Viết Tay)
+            </div>
+            
+            <div style="display: flex; justify-content: center; align-items: center; padding: 10px;">
+                <!-- Canvas vẽ 200x200 pixel -->
+                <canvas id="mnist-canvas" width="200" height="200" style="border: 2px solid var(--border-color); background: #000; border-radius: 8px; cursor: crosshair; touch-action: none;"></canvas>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn" style="background-color: var(--success);" onclick="predictMnistDigit()">Nhận Diện Số</button>
+                <button class="btn btn-outline" style="border: 1px solid var(--text-muted); color: var(--text-muted); background:transparent;" onclick="clearMnistCanvas()">Xóa Vẽ</button>
+            </div>
+
+            <div class="result-card">
+                <div class="result-title">Số Dự Đoán (PyTorch Prediction)</div>
+                <div class="result-value" id="mnist-prediction-val" style="color: var(--success);">--</div>
+            </div>
+        </div>
+
+        <!-- Card 2: Network structure details -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Mạng thần kinh PyTorch
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;">
+                <div>- Lớp vào: Flatten (28x28 ➔ 784 nodes)</div>
+                <div>- Lớp ẩn 1: Linear (784 ➔ 128 nodes) + ReLU</div>
+                <div>- Lớp ra: Linear (128 ➔ 10 nodes) + Softmax</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Neuron Activations & Attention Grid -->
+    <div class="visual-container">
+        <!-- Python code block -->
+        <div class="visual-card">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;">
+                💻 Mã nguồn PyTorch Forward Pass & Softmax
+            </h3>
+            <div class="console-box" id="deep-code-console">
+# outputs = model(img)
+# probabilities = torch.softmax(outputs, dim=1)
+            </div>
+        </div>
+
+        <!-- Visual output graphics -->
+        <div class="visual-card" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Part A: Activated neurons graph -->
+            <div>
+                <h3 style="font-size: 13.5px; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    🟢 Mức độ kích hoạt Lớp đầu ra (Output Activations)
+                </h3>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100px; background: #020617; border-radius: 8px; padding: 15px 24px;" id="output-neurons-bar">
+                    <!-- 10 bars corresponding to 0-9 digits -->
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">0</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">1</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">2</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">3</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">4</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">5</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">6</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">7</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">8</span></div>
+                    <div style="text-align: center; width: 24px;"><div style="height: 10px; background: #334155; width: 100%; border-radius: 2px;"></div><span style="font-size: 9.5px; font-family: monospace;">9</span></div>
+                </div>
+            </div>
+
+            <!-- Part B: Transformer Self-Attention Grid -->
+            <div>
+                <h3 style="font-size: 13.5px; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    👁️ Bản Đồ Chú Ý (Self-Attention Head Matrix)
+                </h3>
+                <div style="display: flex; gap: 20px; align-items: center; background: #020617; border-radius: 8px; padding: 15px;">
+                    <!-- Grid showing correlation between words -->
+                    <!-- We will render a small interactive matrix showing attention weights between words: "nó", "đuổi", "báo", "mồi" -->
+                    <table style="border-collapse: collapse; font-size: 10.5px; width: 100%; max-width: 250px; text-align: center;" id="attention-matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Từ</th>
+                                <th>Báo</th>
+                                <th>nó</th>
+                                <th>đói</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Báo</th>
+                                <td style="background: rgba(168,85,247, 0.8); color: #fff;">0.80</td>
+                                <td style="background: rgba(168,85,247, 0.1); color: var(--text-muted);">0.10</td>
+                                <td style="background: rgba(168,85,247, 0.1); color: var(--text-muted);">0.10</td>
+                            </tr>
+                            <tr>
+                                <th>nó</th>
+                                <td style="background: rgba(168,85,247, 0.65); color: #fff;">0.65</td>
+                                <td style="background: rgba(168,85,247, 0.2); color: var(--text-muted);">0.20</td>
+                                <td style="background: rgba(168,85,247, 0.15); color: var(--text-muted);">0.15</td>
+                            </tr>
+                            <tr>
+                                <th>đói</th>
+                                <td style="background: rgba(168,85,247, 0.1); color: var(--text-muted);">0.10</td>
+                                <td style="background: rgba(168,85,247, 0.55); color: #fff;">0.55</td>
+                                <td style="background: rgba(168,85,247, 0.35); color: #fff;">0.35</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="flex: 1; font-size: 11.5px; color: var(--text-muted); line-height: 1.5;">
+                        Nhìn vào bảng: từ <strong class="text-warning">nó</strong> liên kết mạnh nhất với từ <strong class="text-success">Báo</strong> (trọng số 0.65) chỉ ra chủ thể đói là con báo. Đây là cơ chế cốt lõi của Transformer.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

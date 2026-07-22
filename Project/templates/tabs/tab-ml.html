@@ -1,0 +1,83 @@
+<div class="grid-layout">
+    <!-- Left Column: Controls -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: Model parameters -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Cấu hình mô hình học máy
+            </div>
+            
+            <div class="input-group">
+                <label>Thuật toán (Algorithm)</label>
+                <select id="ml-algo" class="input-control" onchange="onMlAlgoChange()">
+                    <option value="linear">Hồi quy tuyến tính (Linear Regression - Dự đoán giá vé)</option>
+                    <option value="forest">Rừng ngẫu nhiên (Random Forest Classifier - Dự đoán sống sót)</option>
+                    <option value="kmeans">Phân cụm dữ liệu (K-Means Clustering - Phân nhóm khách hàng)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Tập dữ liệu nguồn</label>
+                <select id="ml-dataset" class="input-control">
+                    <option value="titanic">Dữ liệu Titanic Passenger</option>
+                    <option value="students">Dữ liệu Điểm học sinh</option>
+                </select>
+            </div>
+
+            <!-- Hyperparameters (Hiển thị động dựa trên thuật toán chọn) -->
+            <div id="ml-params-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="input-group" id="group-param-estimators" style="display: none;">
+                    <label>Số lượng cây quyết định (n_estimators): <span id="val-estimators">10</span></label>
+                    <input type="range" id="param-estimators" min="5" max="100" value="10" step="5" class="input-control" oninput="document.getElementById('val-estimators').innerText = this.value">
+                </div>
+                <div class="input-group" id="group-param-depth" style="display: none;">
+                    <label>Độ sâu tối đa của cây (max_depth): <span id="val-depth">5</span></label>
+                    <input type="range" id="param-depth" min="1" max="15" value="5" step="1" class="input-control" oninput="document.getElementById('val-depth').innerText = this.value">
+                </div>
+                <div class="input-group" id="group-param-clusters" style="display: none;">
+                    <label>Số lượng nhóm phân cụm (K): <span id="val-clusters">3</span></label>
+                    <input type="range" id="param-clusters" min="2" max="6" value="3" step="1" class="input-control" oninput="document.getElementById('val-clusters').innerText = this.value">
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: 10px;" onclick="runMlTraining()">
+                <span>Huấn luyện & Đánh giá</span>
+            </button>
+        </div>
+
+        <!-- Card 2: Metrics output -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--success);">
+                Chỉ số đánh giá (Evaluation Metrics)
+            </div>
+            <div id="ml-metrics-output" style="font-size: 12.5px; display: flex; flex-direction: column; gap: 8px;">
+                <span style="color: var(--text-muted);">Nhấn "Huấn luyện" để chạy mô hình Scikit-Learn.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Visualizer board -->
+    <div class="visual-container">
+        <!-- Python code block -->
+        <div class="visual-card">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;">
+                💻 Mã nguồn Scikit-Learn huấn luyện mô hình
+            </h3>
+            <div class="console-box" id="ml-code-console">
+# Định nghĩa pipeline học máy
+# pipeline.fit(X_train, y_train)
+            </div>
+        </div>
+
+        <!-- Visual output graphics -->
+        <div class="visual-card" style="flex: 1; display: flex; flex-direction: column;">
+            <h3 style="font-size: 13px; color: var(--accent); margin-bottom: 12px; text-transform: uppercase;" id="ml-visual-title">
+                📊 Kết quả trực quan mô hình
+            </h3>
+            
+            <div style="flex: 1; background: #020617; border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center;" id="ml-visual-board">
+                <span style="color: var(--text-muted); font-size: 12.5px;">Chưa có đồ thị trực quan.</span>
+            </div>
+        </div>
+    </div>
+</div>

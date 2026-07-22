@@ -1,0 +1,84 @@
+<div class="grid-layout">
+    <!-- Left Column: Ingestion & Search -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: Ingestion -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--success);">
+                Nạp Tài Liệu (Ingestion Pipeline)
+            </div>
+            
+            <div class="input-group">
+                <label>Văn bản tài liệu nội bộ (.txt / .md)</label>
+                <textarea id="rag-doc-input" class="input-control" rows="5" style="font-family: inherit; font-size: 11.5px;">Chính sách đổi trả của cửa hàng: Khách hàng được đổi trả sản phẩm trong vòng 7 ngày kể từ ngày mua nếu sản phẩm còn nguyên tem mác. Phí vận chuyển khi đổi trả do khách hàng tự chi trả, trừ trường hợp lỗi từ nhà sản xuất.</textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px;">
+                <div class="input-group">
+                    <label>Kích thước Chunk</label>
+                    <input type="number" id="rag-chunk-size" class="input-control" value="80">
+                </div>
+                <div class="input-group">
+                    <label>Overlap</label>
+                    <input type="number" id="rag-chunk-overlap" class="input-control" value="10">
+                </div>
+            </div>
+
+            <button class="btn" style="background-color: var(--success);" onclick="runRagIngestion()">
+                <span>Chia nhỏ & Nạp Vector DB</span>
+            </button>
+            
+            <div style="font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span>Số Chunk tạo ra: <strong id="rag-chunks-count">--</strong></span>
+                <span>Tình trạng ChromaDB: <strong id="rag-chroma-status">Đang trống</strong></span>
+            </div>
+        </div>
+
+        <!-- Card 2: Query Search -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Đặt Câu Hỏi (Query Chat)
+            </div>
+            <div class="input-group">
+                <label>Câu hỏi về tài liệu</label>
+                <input type="text" id="rag-query-input" class="input-control" value="Tôi muốn trả hàng thì ai chịu phí vận chuyển?" onkeydown="if(event.key === 'Enter') runRagChat()">
+            </div>
+            <button class="btn" onclick="runRagChat()">
+                <span>Truy xuất & Hỏi Chatbot</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Column: RAG Chat Console & Evaluation -->
+    <div class="visual-container">
+        <!-- RAG Chat outputs -->
+        <div class="visual-card" style="flex: 1.2; display: flex; flex-direction: column;">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;">
+                💬 RAG Chatbot Response
+            </h3>
+            <div class="console-box" id="rag-chat-response" style="flex: 1; background: #020617; font-family: inherit; font-size: 13px; line-height: 1.5; min-height: 110px;">
+                # Đang chờ câu hỏi của bạn...
+            </div>
+        </div>
+
+        <!-- Retrieved context chunks & similarity scores -->
+        <div class="visual-card">
+            <h3 style="font-size: 12.5px; color: var(--warning); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                🔍 Tài liệu truy xuất (Retrieved Contexts via Vector DB & Re-ranker)
+            </h3>
+            <div id="rag-retrieved-chunks" style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+                <div style="color: var(--text-muted);">Chưa thực hiện truy xuất.</div>
+            </div>
+        </div>
+
+        <!-- Ragas evaluation box -->
+        <div class="visual-card">
+            <h3 style="font-size: 12.5px; color: var(--success); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                ⚖️ Đánh Giá Hệ Thống RAG (RAG Evaluation Metrics)
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; text-align: center; font-size: 11.5px;" id="rag-eval-metrics">
+                <div>Độ trung thực (Faithfulness - Không ảo giác): <strong class="text-success" id="val-eval-faith">--</strong></div>
+                <div>Độ liên quan câu hỏi (Answer Relevance): <strong class="text-success" id="val-eval-relevance">--</strong></div>
+            </div>
+        </div>
+    </div>
+</div>

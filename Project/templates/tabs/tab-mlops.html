@@ -1,0 +1,66 @@
+<div class="grid-layout">
+    <!-- Left Column: Controls -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: SSE Streaming test -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Gọi Stream API (SSE Test)
+            </div>
+            <div class="input-group">
+                <label>Văn bản để Stream từ Backend</label>
+                <input type="text" id="mlops-stream-text" class="input-control" value="Chào bạn, tôi là một mô hình AI được phục vụ hoàn chỉnh qua API bất đồng bộ.">
+            </div>
+            <button class="btn" onclick="runMlopsSseStream()">
+                <span>Gọi API Stream</span>
+            </button>
+        </div>
+
+        <!-- Card 2: Docker builder -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--success);">
+                Đóng Gói Docker (MLOps)
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn" style="background-color: var(--success);" onclick="generateDockerConfig('dockerfile')">Tạo Dockerfile</button>
+                <button class="btn" style="background-color: var(--warning);" onclick="generateDockerConfig('compose')">Tạo docker-compose.yml</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Terminal outputs -->
+    <div class="visual-container">
+        <!-- Part A: SSE Output stream -->
+        <div class="visual-card">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;">
+                ⚡ Luồng ký tự Server-Sent Events (SSE Terminal)
+            </h3>
+            <div class="console-box" id="mlops-sse-console" style="min-height: 100px; max-height: 140px; color: var(--success);">
+                # Đang chờ kết nối stream...
+            </div>
+        </div>
+
+        <!-- Part B: Docker config files preview -->
+        <div class="visual-card">
+            <h3 style="font-size: 13.5px; color: var(--success); margin-bottom: 8px; text-transform: uppercase;" id="mlops-preview-title">
+                🐋 Cấu hình Container Docker
+            </h3>
+            <div class="console-box" id="mlops-docker-preview" style="min-height: 130px; max-height: 200px;">
+                # Nhấp nút cột trái để hiển thị file cấu hình
+            </div>
+        </div>
+
+        <!-- Part C: LangSmith mock tracker -->
+        <div class="visual-card">
+            <h3 style="font-size: 13px; color: var(--accent); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                🛠️ Giám Sát Tracing (LangSmith Observability)
+            </h3>
+            <div class="console-box" id="mlops-langsmith-console" style="min-height: 100px; font-family: monospace; line-height: 1.5; color: #a855f7;">
+[+] Project: "applied-ai-visualizer" -> Run ID: "tr-9150-a"
+├── RAG_Chain_Pipeline (850ms, 540 tokens)
+│   ├── VectorDB_Retrieval (150ms) -> Query similarity matched
+│   └── LLM_Generation_Mini (700ms) -> Response parsed JSON
+└── Status: SUCCESS
+            </div>
+        </div>
+    </div>
+</div>

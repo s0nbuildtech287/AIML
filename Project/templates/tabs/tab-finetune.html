@@ -1,0 +1,96 @@
+<div class="grid-layout">
+    <!-- Left Column: Params -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: LoRA config -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Cấu hình LoRA (PEFT Parameters)
+            </div>
+            
+            <div class="input-group">
+                <label>Base Model (Mô hình gốc)</label>
+                <select id="ft-base-model" class="input-control">
+                    <option value="qwen">Qwen-2-1.5B (Lượng tử hóa 4-bit)</option>
+                    <option value="llama">Llama-3-8B (Lượng tử hóa 4-bit)</option>
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="input-group">
+                    <label>LoRA Rank (r): <span id="ft-val-r">8</span></label>
+                    <input type="range" id="ft-param-r" min="4" max="32" value="8" step="4" class="input-control" oninput="document.getElementById('ft-val-r').innerText = this.value">
+                </div>
+                <div class="input-group">
+                    <label>LoRA Alpha: <span id="ft-val-alpha">16</span></label>
+                    <input type="range" id="ft-param-alpha" min="8" max="64" value="16" step="8" class="input-control" oninput="document.getElementById('ft-val-alpha').innerText = this.value">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Learning Rate (lr)</label>
+                <input type="text" id="ft-lr" class="input-control" value="2e-4" readonly style="opacity: 0.7;">
+            </div>
+
+            <button class="btn" style="margin-top: 10px;" onclick="runFineTuningSimulation()">
+                <span>Bắt đầu Fine-tuning (Start SFT)</span>
+            </button>
+        </div>
+
+        <!-- Card 2: Training Status -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--success);">
+                Trạng thái Huấn luyện
+            </div>
+            <div style="font-size: 12.5px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Số Epochs:</span>
+                    <strong id="ft-current-epoch">0 / 3</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Số Steps:</span>
+                    <strong id="ft-current-step">0 / 120</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Training Loss:</span>
+                    <strong id="ft-current-loss" class="text-warning">--</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Loss Curve Graph -->
+    <div class="visual-container">
+        <!-- Python code block -->
+        <div class="visual-card">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;">
+                💻 Hugging Face LFT Trainer setup code
+            </h3>
+            <div class="console-box" id="ft-code-console">
+# trainer = SFTTrainer(model=model, peft_config=peft_config, ...)
+# trainer.train()
+            </div>
+        </div>
+
+        <!-- Loss chart curve -->
+        <div class="visual-card" style="flex: 1; display: flex; flex-direction: column;">
+            <h3 style="font-size: 13px; color: var(--accent); margin-bottom: 12px; text-transform: uppercase;">
+                📊 Đồ thị kiểm giám sai số Loss Curve (Real-time monitoring)
+            </h3>
+            
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; border-radius: 8px; overflow: hidden; min-height: 220px;">
+                <svg id="ft-svg" width="400" height="180" style="background:#020617;">
+                    <!-- Trục tọa độ -->
+                    <line x1="40" y1="150" x2="380" y2="150" stroke="#1e293b" stroke-width="1.5"></line>
+                    <line x1="40" y1="15" x2="40" y2="150" stroke="#1e293b" stroke-width="1.5"></line>
+                    
+                    <!-- Nhãn -->
+                    <text x="375" y="162" fill="var(--text-muted)" font-size="9" text-anchor="end">Steps</text>
+                    <text x="48" y="25" fill="var(--text-muted)" font-size="9" text-anchor="start">Loss</text>
+
+                    <!-- Đường gấp khúc của loss -->
+                    <polyline id="ft-loss-line" points="" fill="none" stroke="var(--warning)" stroke-width="2" style="transition: all 0.2s ease;"></polyline>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>

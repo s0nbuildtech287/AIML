@@ -1,0 +1,65 @@
+<div class="grid-layout">
+    <!-- Left Column: Controls & Schema -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Card 1: Prompt Techniques -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--primary);">
+                Trình Xây Dựng Prompt
+            </div>
+            
+            <div class="input-group">
+                <label>Kỹ thuật viết Prompt</label>
+                <select id="llm-prompt-tech" class="input-control" onchange="onLlmTechChange()">
+                    <option value="zeroshot">Zero-shot (Không kèm ví dụ)</option>
+                    <option value="fewshot">Few-shot (Có kèm 2 ví dụ minh họa)</option>
+                    <option value="cot">Chain-of-Thought (Chuỗi tư duy từng bước)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Nội dung tin nhắn khách hàng (User message)</label>
+                <textarea id="llm-user-input" class="input-control" rows="4" style="font-family: inherit; font-size: 13px;">Giao hàng trễ quá, tôi đặt hàng từ thứ Hai mà tới thứ Sáu vẫn chưa thấy giao tới nơi. Rất không hài lòng!</textarea>
+            </div>
+
+            <button class="btn" style="margin-top: 10px;" onclick="runLlmStructuredOutput()">
+                <span>Sinh Prompt & Trích xuất JSON</span>
+            </button>
+        </div>
+
+        <!-- Card 2: Pydantic Schema specification -->
+        <div class="panel">
+            <div class="panel-title" style="color: var(--success);">
+                Pydantic JSON Schema (Cấu trúc đầu ra)
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); background: #020617; border-radius: 6px; padding: 12px; line-height: 1.4;">
+                class CustomerAnalysis(BaseModel):<br>
+                &nbsp;&nbsp;intent: str = Field(descr="Ý đồ")<br>
+                &nbsp;&nbsp;urgency: int = Field(descr="Độ khẩn 1-5")<br>
+                &nbsp;&nbsp;summary: str = Field(descr="Tóm tắt")
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Prompt Assembly & JSON Output -->
+    <div class="visual-container">
+        <!-- Part 1: Assembled Prompt view -->
+        <div class="visual-card">
+            <h3 style="font-size: 13px; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;">
+                ✉️ Prompt lắp ráp gửi cho LLM
+            </h3>
+            <div class="console-box" id="llm-assembled-prompt" style="max-height: 160px; min-height: 100px;">
+                # Nhấp nút để lắp ráp và gửi prompt...
+            </div>
+        </div>
+
+        <!-- Part 2: Output JSON -->
+        <div class="visual-card" style="flex: 1; display: flex; flex-direction: column;">
+            <h3 style="font-size: 13px; color: var(--success); margin-bottom: 8px; text-transform: uppercase;">
+                📋 Kết quả cấu trúc đầu ra (Pydantic parsed JSON)
+            </h3>
+            <div class="console-box" id="llm-json-output" style="flex: 1; background: #020617; color: var(--success); min-height: 120px;">
+                # Chờ xử lý...
+            </div>
+        </div>
+    </div>
+</div>
