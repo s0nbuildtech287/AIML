@@ -23,17 +23,18 @@ body {
     color: var(--text-main);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
-    padding: 24px;
+    padding: 16px 24px;
 }
 
 .container {
-    max-width: 1200px;
+    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
 }
 
 /* Header & Navigation */
 header {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 15px;
     display: flex;
@@ -61,8 +62,29 @@ h1 {
     display: flex;
     gap: 8px;
     overflow-x: auto;
-    padding-bottom: 10px;
-    margin-bottom: 24px;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.tab-nav::-webkit-scrollbar {
+    height: 4px;
+    background: transparent;
+}
+
+.tab-nav::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.tab-nav:hover {
+    scrollbar-width: thin;
+}
+
+.tab-nav:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .tab-btn {

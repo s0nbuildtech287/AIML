@@ -26,6 +26,9 @@ async function switchTab(tabId) {
     const btn = document.getElementById(`btn-${tabId}`);
     if (btn) btn.classList.add("active");
 
+    const nav = document.querySelector(".tab-nav");
+    if (nav && tabId === "home") nav.scrollLeft = 0;
+
     const badge = document.getElementById("brand-badge-text");
     if (tabId === "home") badge.innerText = "Full Roadmap (Bài 1-34)";
     else if (tabId === "numpy") badge.innerText = "Lesson 1: NumPy";
