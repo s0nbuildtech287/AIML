@@ -41,17 +41,21 @@ if os.path.exists(static_dir):
 
 templates = Jinja2Templates(directory=template_dir)
 
+@app.get("/favicon.ico")
+async def favicon():
+    return HTMLResponse(content="", status_code=204)
+
 @app.get("/", response_class=HTMLResponse)
 @app.get("/mindmap", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.get("/tabs/{tab_name}", response_class=HTMLResponse)
 async def get_tab(tab_name: str, request: Request):
     tab_file = os.path.join(template_dir, "tabs", f"tab-{tab_name}.html")
     if not os.path.exists(tab_file):
         return HTMLResponse(content="Giao diện tab không tồn tại", status_code=404)
-    return templates.TemplateResponse(f"tabs/tab-{tab_name}.html", {"request": request})
+    return templates.TemplateResponse(request=request, name=f"tabs/tab-{tab_name}.html")
 
 # =====================================================================
 # API BÀI 1: NUMPY BENCHMARK
