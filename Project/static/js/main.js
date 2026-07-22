@@ -20,11 +20,16 @@ let gdIntervalId = null;
 // =====================================================================
 
 async function switchTab(tabId) {
-    document.querySelectorAll(".tab-nav .tab-btn").forEach(btn => {
+    // Xóa class active ở tất cả các nút
+    document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.classList.remove("active");
     });
-    const btn = document.getElementById(`btn-${tabId}`);
-    if (btn) btn.classList.add("active");
+    
+    // Kích hoạt class active cho nút tab được chọn
+    const activeBtn = document.getElementById(`btn-${tabId}`);
+    if (activeBtn) {
+        activeBtn.classList.add("active");
+    }
 
     const nav = document.querySelector(".tab-nav");
     if (nav && tabId === "home") nav.scrollLeft = 0;
