@@ -88,7 +88,7 @@ async function switchTab(tabId) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    switchTab("numpy");
+    switchTab("home");
 });
 
 
