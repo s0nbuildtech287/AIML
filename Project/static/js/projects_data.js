@@ -645,3 +645,10 @@ function setProjectFilter(cat, btn) {
     if (btn) btn.classList.add("active");
     filterProjects();
 }
+
+// Gắn trực tiếp các hàm vào window để đảm bảo truy cập toàn cục 100%
+window.projectsData = projectsData;
+window.renderProjectsList = renderProjectsList;
+window.filterProjects = filterProjects;
+window.setProjectFilter = setProjectFilter;
+
