@@ -245,6 +245,183 @@
         color: var(--c-ml);
     }
 
+    /* Modal Header & Tabs */
+    .modal-nav-tabs {
+        display: flex;
+        gap: 6px;
+        background: rgba(15, 23, 42, 0.8);
+        padding: 3px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .modal-nav-tab {
+        padding: 5px 12px;
+        font-size: 11px;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .modal-nav-tab.active {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Quiz Container & Elements */
+    .quiz-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .quiz-header-banner {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .quiz-header-info h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 3px;
+    }
+
+    .quiz-header-info p {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    .quiz-result-badge-card {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .quiz-result-pass {
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid #10b981;
+        color: #34d399;
+    }
+
+    .quiz-result-fail {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid #ef4444;
+        color: #f87171;
+    }
+
+    .quiz-question-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .quiz-q-title {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #f1f5f9;
+        line-height: 1.5;
+    }
+
+    .quiz-q-num {
+        display: inline-block;
+        background: rgba(56, 189, 248, 0.15);
+        color: #38bdf8;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-right: 6px;
+    }
+
+    .quiz-options-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .quiz-opt-btn {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+        padding: 9px 12px;
+        font-size: 11.5px;
+        color: #cbd5e1;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .quiz-opt-btn:hover:not(.disabled) {
+        border-color: #38bdf8;
+        background: rgba(56, 189, 248, 0.08);
+        color: #fff;
+    }
+
+    .quiz-opt-btn.selected {
+        border-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.25);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .quiz-opt-btn.correct {
+        border-color: #10b981 !important;
+        background: rgba(16, 185, 129, 0.25) !important;
+        color: #6ee7b7 !important;
+        font-weight: 600;
+    }
+
+    .quiz-opt-btn.wrong {
+        border-color: #ef4444 !important;
+        background: rgba(239, 68, 68, 0.25) !important;
+        color: #fca5a5 !important;
+    }
+
+    .quiz-explain-box {
+        background: rgba(15, 23, 42, 0.9);
+        border-left: 3px solid #38bdf8;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 11px;
+        line-height: 1.5;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
+
+    .quiz-footer-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border-color);
+    }
+
     @media (max-width: 1400px) {
         .dashboard-grid-7 {
             grid-template-columns: repeat(4, 1fr);
@@ -276,6 +453,10 @@
         .modal-diagram-box {
             font-size: 9px;
             padding: 8px;
+        }
+        .modal-nav-tabs {
+            width: 100%;
+            justify-content: center;
         }
     }
 
@@ -536,10 +717,20 @@
     <div class="modal-card" onclick="event.stopPropagation()">
         <span class="modal-close-btn" onclick="closeModal()">&times;</span>
         <div class="modal-header-section">
-            <span id="modal-concept-id" class="modal-badge">BÀI 1</span>
-            <h2 id="modal-concept-title">NumPy</h2>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 25px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="modal-concept-id" class="modal-badge">BÀI 1</span>
+                    <h2 id="modal-concept-title">NumPy</h2>
+                </div>
+                <div class="modal-nav-tabs">
+                    <button class="modal-nav-tab active" id="mtab-theory" onclick="switchModalTab('theory')">📖 Kiến Thức & Code</button>
+                    <button class="modal-nav-tab" id="mtab-quiz" onclick="switchModalTab('quiz')">📝 Bài Test (10 Câu)</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body-section">
+
+        <!-- Tab 1: Theory View -->
+        <div id="modal-body-theory" class="modal-body-section">
             <div class="modal-info-block">
                 <h3>💡 Bản chất & Định nghĩa trực quan</h3>
                 <p id="modal-def">Mảng và ma trận...</p>
@@ -555,6 +746,30 @@
             <div class="modal-info-block">
                 <h3>📊 Sơ đồ luồng kiến thức</h3>
                 <div id="modal-diagram" class="modal-diagram-box"></div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Quiz View -->
+        <div id="modal-body-quiz" class="modal-body-section" style="display: none;">
+            <div class="quiz-container">
+                <div class="quiz-header-banner">
+                    <div class="quiz-header-info">
+                        <h4 id="quiz-banner-title">📝 Bài Kiểm Tra Trắc Nghiệm (10 Câu)</h4>
+                        <p>🎯 Đạt tiêu chuẩn: Đúng tối thiểu <strong>80% (8/10 câu)</strong> trở lên.</p>
+                    </div>
+                    <div id="quiz-score-badge" style="display: none;"></div>
+                </div>
+
+                <div id="quiz-questions-list" style="display: flex; flex-direction: column; gap: 14px;"></div>
+
+                <div class="quiz-footer-actions">
+                    <button id="btn-submit-quiz" class="btn" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);" onclick="submitQuiz()">
+                        <span>🚀 Nộp bài & Chấm điểm</span>
+                    </button>
+                    <button id="btn-retry-quiz" class="btn" style="background: #334155; display: none;" onclick="retryQuiz()">
+                        <span>🔄 Làm lại bài test</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

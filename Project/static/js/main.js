@@ -1110,12 +1110,37 @@ const lessonDetails = {
     }
 };
 
+let currentConceptKey = null;
+let quizUserAnswers = {}; // { [conceptKey]: { [qIndex]: selectedOptionIndex } }
+let quizSubmittedState = {}; // { [conceptKey]: boolean }
+
+function switchModalTab(tabName) {
+    document.querySelectorAll(".modal-nav-tab").forEach(tab => tab.classList.remove("active"));
+    
+    const theoryBody = document.getElementById("modal-body-theory");
+    const quizBody = document.getElementById("modal-body-quiz");
+    
+    if (tabName === "theory") {
+        document.getElementById("mtab-theory").classList.add("active");
+        if (theoryBody) theoryBody.style.display = "flex";
+        if (quizBody) quizBody.style.display = "none";
+    } else {
+        document.getElementById("mtab-quiz").classList.add("active");
+        if (theoryBody) theoryBody.style.display = "none";
+        if (quizBody) quizBody.style.display = "flex";
+    }
+}
+
 function openModal(conceptKey) {
+    currentConceptKey = conceptKey;
     const data = lessonDetails[conceptKey];
     if (!data) return;
 
     const modal = document.getElementById("detail-modal");
     if (!modal) return;
+
+    // Reset tab về Theory khi mở modal mới
+    switchModalTab("theory");
 
     document.getElementById("modal-concept-id").innerText = data.id;
     document.getElementById("modal-concept-title").innerText = data.title;
@@ -1134,7 +1159,160 @@ function openModal(conceptKey) {
     document.getElementById("modal-code").innerText = data.code;
     document.getElementById("modal-diagram").innerText = data.diagram;
 
+    // Khởi tạo bài Quiz tương ứng
+    renderQuiz(conceptKey);
+
     modal.style.display = "flex";
+}
+
+function renderQuiz(conceptKey) {
+    const container = document.getElementById("quiz-questions-list");
+    const bannerTitle = document.getElementById("quiz-banner-title");
+    const scoreBadge = document.getElementById("quiz-score-badge");
+    const submitBtn = document.getElementById("btn-submit-quiz");
+    const retryBtn = document.getElementById("btn-retry-quiz");
+
+    if (!container) return;
+
+    const questions = (typeof lessonQuizzes !== "undefined") ? lessonQuizzes[conceptKey] : null;
+    const lessonInfo = lessonDetails[conceptKey];
+
+    if (bannerTitle) {
+        bannerTitle.innerText = `📝 Bài Kiểm Tra Trắc Nghiệm - ${lessonInfo ? lessonInfo.title : conceptKey}`;
+    }
+
+    if (!questions || questions.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px;">Bài học này đang được cập nhật câu hỏi kiểm tra...</div>`;
+        if (submitBtn) submitBtn.style.display = "none";
+        if (retryBtn) retryBtn.style.display = "none";
+        if (scoreBadge) scoreBadge.style.display = "none";
+        return;
+    }
+
+    if (!quizUserAnswers[conceptKey]) {
+        quizUserAnswers[conceptKey] = {};
+    }
+    const userAns = quizUserAnswers[conceptKey];
+    const isSubmitted = !!quizSubmittedState[conceptKey];
+
+    let html = "";
+    questions.forEach((q, qIdx) => {
+        const userChoice = userAns[qIdx];
+
+        html += `
+            <div class="quiz-question-card" id="quiz-qcard-${qIdx}">
+                <div class="quiz-q-title">
+                    <span class="quiz-q-num">Câu ${qIdx + 1}/10</span>
+                    ${q.q}
+                </div>
+                <div class="quiz-options-grid">
+        `;
+
+        q.options.forEach((optText, optIdx) => {
+            let optClass = "quiz-opt-btn";
+            let stateBadge = "";
+
+            if (isSubmitted) {
+                optClass += " disabled";
+                if (optIdx === q.answer) {
+                    optClass += " correct";
+                    stateBadge = `<span style="color: #34d399; font-weight: bold;">✓ Đáp án đúng</span>`;
+                } else if (userChoice === optIdx && userChoice !== q.answer) {
+                    optClass += " wrong";
+                    stateBadge = `<span style="color: #f87171; font-weight: bold;">✗ Bạn đã chọn</span>`;
+                }
+            } else {
+                if (userChoice === optIdx) {
+                    optClass += " selected";
+                }
+            }
+
+            const clickAttr = isSubmitted ? "" : `onclick="selectQuizOption(${qIdx}, ${optIdx})"`;
+
+            html += `
+                <button class="${optClass}" ${clickAttr}>
+                    <span>${optText}</span>
+                    ${stateBadge}
+                </button>
+            `;
+        });
+
+        html += `</div>`;
+
+        // Nếu đã nộp bài, hiển thị giải thích chi tiết
+        if (isSubmitted) {
+            html += `
+                <div class="quiz-explain-box">
+                    <strong>💡 Giải thích chi tiết:</strong> ${q.explain}
+                </div>
+            `;
+        }
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+
+    // Cập nhật nút bấm và Score Badge
+    if (isSubmitted) {
+        if (submitBtn) submitBtn.style.display = "none";
+        if (retryBtn) retryBtn.style.display = "inline-flex";
+
+        let score = 0;
+        questions.forEach((q, idx) => {
+            if (userAns[idx] === q.answer) score++;
+        });
+
+        const pct = Math.round((score / questions.length) * 100);
+        const isPass = pct >= 80;
+
+        if (scoreBadge) {
+            scoreBadge.style.display = "inline-flex";
+            scoreBadge.className = `quiz-result-badge-card ${isPass ? "quiz-result-pass" : "quiz-result-fail"}`;
+            scoreBadge.innerHTML = isPass
+                ? `<span>🎉 ĐẠT: ${score}/10 (${pct}%)</span>`
+                : `<span>❌ CHƯA ĐẠT: ${score}/10 (${pct}%) - Cần ≥80%</span>`;
+        }
+    } else {
+        if (submitBtn) submitBtn.style.display = "inline-flex";
+        if (retryBtn) retryBtn.style.display = "none";
+        if (scoreBadge) scoreBadge.style.display = "none";
+    }
+}
+
+function selectQuizOption(qIdx, optIdx) {
+    if (!currentConceptKey) return;
+    if (quizSubmittedState[currentConceptKey]) return; // Đã nộp bài thì không đổi được nữa
+
+    if (!quizUserAnswers[currentConceptKey]) {
+        quizUserAnswers[currentConceptKey] = {};
+    }
+    quizUserAnswers[currentConceptKey][qIdx] = optIdx;
+    renderQuiz(currentConceptKey);
+}
+
+function submitQuiz() {
+    if (!currentConceptKey) return;
+    const questions = (typeof lessonQuizzes !== "undefined") ? lessonQuizzes[currentConceptKey] : null;
+    if (!questions) return;
+
+    const userAns = quizUserAnswers[currentConceptKey] || {};
+    const answeredCount = Object.keys(userAns).length;
+
+    if (answeredCount < questions.length) {
+        const confirmSubmit = confirm(`Bạn chưa trả lời hết 10 câu hỏi (Mới trả lời ${answeredCount}/10 câu).\n\nBạn có chắc chắn muốn nộp bài & chấm điểm ngay không?`);
+        if (!confirmSubmit) return;
+    }
+
+    quizSubmittedState[currentConceptKey] = true;
+    renderQuiz(currentConceptKey);
+}
+
+function retryQuiz() {
+    if (!currentConceptKey) return;
+    quizUserAnswers[currentConceptKey] = {};
+    quizSubmittedState[currentConceptKey] = false;
+    renderQuiz(currentConceptKey);
 }
 
 function closeModal(event) {
