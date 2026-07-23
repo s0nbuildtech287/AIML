@@ -32,6 +32,7 @@ async function switchTab(tabId) {
 
     const badge = document.getElementById("brand-badge-text");
     if (tabId === "home") badge.innerText = "Full Roadmap (Bài 1-34)";
+    else if (tabId === "projects") badge.innerText = "70+ AI & Quant Projects";
     else if (tabId === "numpy") badge.innerText = "Lesson 1: NumPy";
     else if (tabId === "pandas") badge.innerText = "Lesson 2: Pandas";
     else if (tabId === "eda") badge.innerText = "Lesson 3-4: Data Cleaning & EDA";
