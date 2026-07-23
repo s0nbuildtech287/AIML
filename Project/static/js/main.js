@@ -78,6 +78,10 @@ async function switchTab(tabId) {
             onLlmTechChange();
         } else if (tabId === "finetune") {
             resetFineTuningSimulation();
+        } else if (tabId === "projects") {
+            if (typeof renderProjectsList === "function" && typeof projectsData !== "undefined") {
+                renderProjectsList(projectsData);
+            }
         }
     } catch (err) {
         console.error(err);

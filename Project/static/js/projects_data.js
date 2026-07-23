@@ -1,0 +1,647 @@
+// =====================================================================
+// DỮ LIỆU 70 DỰ ÁN CẨM NANG AI APPLICATION & QUANT FINANCE
+// =====================================================================
+
+const projectsData = [
+    // =====================================================================
+    // NHÓM 1: 5 DỰ ÁN MẪU BAN ĐẦU
+    // =====================================================================
+    {
+        num: "DỰ ÁN 01",
+        title: "AI Data Analyzer & AutoML Platform",
+        cat: "platform",
+        catName: "AutoML & Data",
+        desc: "Nền tảng AI cho phép người dùng tải lên các tập dữ liệu (CSV/Excel), tự động phân tích cấu trúc dữ liệu, phát hiện lỗi (missing values, outliers, duplicates), thực hiện EDA, gợi ý tiền xử lý và tự động huấn luyện nhiều mô hình ML. Hệ thống đánh giá hiệu suất, chọn mô hình tối ưu và dùng LLM giải thích dữ liệu bằng ngôn ngữ tự nhiên.",
+        stack: ["Python", "FastAPI", "Pandas", "Scikit-Learn", "Optuna", "OpenAI API", "Vue/React"]
+    },
+    {
+        num: "DỰ ÁN 02",
+        title: "ML Prediction Platform",
+        cat: "platform",
+        catName: "MLOps & Model",
+        desc: "Nền tảng triển khai và quản lý các mô hình Machine Learning, cho phép tạo, huấn luyện, đánh giá và triển khai mô hình qua giao diện web. Hỗ trợ Regression, Classification, Clustering, cung cấp REST API dự đoán real-time, versioning mô hình và theo dõi drift sau khi deploy.",
+        stack: ["FastAPI", "Docker", "MLflow", "Scikit-Learn", "PostgreSQL", "Redis"]
+    },
+    {
+        num: "DỰ ÁN 03",
+        title: "Chat with Documents (Enterprise RAG)",
+        cat: "llm",
+        catName: "LLM & RAG",
+        desc: "Hệ thống hỏi đáp thông minh trên tài liệu doanh nghiệp (PDF, DOCX, Excel, PPTX, Markdown). Xử lý chunking, tạo embedding, lưu vào Vector DB. Hỗ trợ tìm kiếm ngữ nghĩa RAG, trích xuất nguồn (Citations) và chống ảo giác thông tin.",
+        stack: ["LangChain", "ChromaDB/Pinecone", "FastAPI", "OpenAI/Claude", "Unstructured", "React"]
+    },
+    {
+        num: "DỰ ÁN 04",
+        title: "AI Coding Assistant & Repo Indexer",
+        cat: "llm",
+        catName: "LLM & Code",
+        desc: "Trợ lý lập trình AI hỗ trợ phân tích mã nguồn, giải thích kiến trúc dự án, sinh mã, review code và đề xuất refactor. Lập chỉ mục toàn bộ Git repository, tìm kiếm ngữ nghĩa trong source code, hỗ trợ sinh API, Unit Test và tài liệu kỹ thuật.",
+        stack: ["LangGraph", "Tree-Sitter", "Vector DB", "FastAPI", "Ollama/DeepSeek", "VS Code Extension"]
+    },
+    {
+        num: "DỰ ÁN 05",
+        title: "Multi-Agent AI Platform",
+        cat: "llm",
+        catName: "Multi-Agent",
+        desc: "Nền tảng AI Agent gồm nhiều tác nhân phối hợp: Planner Agent, Research Agent, Coding Agent, Testing Agent và Reviewer Agent. Hỗ trợ Tool Calling, MCP (Model Context Protocol), Workflow Orchestration và Shared State Memory.",
+        stack: ["LangGraph", "CrewAI", "FastAPI", "Python", "Docker", "WebSockets"]
+    },
+
+    // =====================================================================
+    // NHÓM 2: 20 DỰ ÁN QUANT FINANCE & ALGORITHMIC TRADING (DÀNH CHO QUANT DEV)
+    // =====================================================================
+    {
+        num: "DỰ ÁN 06",
+        title: "AI-Powered Algorithmic Trading EA (MetaTrader 5 / MQL5 Bridge)",
+        cat: "quant",
+        catName: "Quant & EA",
+        desc: "Robot giao dịch tự động (Expert Advisor) kết nối MetaTrader 5 với Python qua ZeroMQ/Sockets. Sử dụng LightGBM/XGBoost dự đoán xác suất nến tiếp theo T+1, tự động tính toán Lot size theo Kelly Criterion, quản lý rủi ro Martingale/Grid linh hoạt và cắt lỗ ATR.",
+        stack: ["MQL5", "MetaTrader 5", "Python", "ZeroMQ", "LightGBM", "Ta-Lib", "Pandas"]
+    },
+    {
+        num: "DỰ ÁN 07",
+        title: "Financial News Sentiment & Market Impact Score Engine",
+        cat: "quant",
+        catName: "Quant & NLP",
+        desc: "Hệ thống cào tin tức tự động (Reuters, ForexFactory, Bloomberg), sử dụng FinBERT/GPT-4o tính điểm Sentiment (Positive/Negative/Hawkish/Dovish) và đo lường tác động biến động giá kỳ vọng trước các sự kiện lịch kinh tế (CPI, NFP, FOMC).",
+        stack: ["FinBERT", "OpenAI API", "Scrapy", "FastAPI", "PostgreSQL", "TradingView Webhooks"]
+    },
+    {
+        num: "DỰ ÁN 08",
+        title: "High-Frequency Order Book Imbalance & Price Action Predictor",
+        cat: "quant",
+        catName: "Quant HFT",
+        desc: "Phân tích dữ liệu sổ lệnh Level 2/Level 3 (Order Book Depth) và Tick Data bằng CNN-LSTM / Temporal Transformer để dự đoán hướng bứt phá giá cực ngắn hạn (Scalping), đo độ lệch Order Flow Toxicity và giảm trượt giá Slippage.",
+        stack: ["PyTorch", "C++", "Python", "Order Book L2/L3", "Polars", "Kafka", "WebSocket"]
+    },
+    {
+        num: "DỰ ÁN 09",
+        title: "Reinforcement Learning Portfolio Optimization & Asset Allocation",
+        cat: "quant",
+        catName: "Quant RL",
+        desc: "Mô hình Học tăng cường (DRL PPO/SAC) học cách tự động phân bổ tỷ trọng danh mục đầu tư đa tài sản (Cổ phiếu, Crypto, Forex) nhằm tối đa hóa Sharpe Ratio và khống chế Maximum Drawdown dưới ngưỡng an toàn.",
+        stack: ["Stable-Baselines3", "Gymnasium", "PyTorch", "Backtrader", "YFinance", "Plotly"]
+    },
+    {
+        num: "DỰ ÁN 10",
+        title: "SEC 10-K & Financial Report Analysis RAG System",
+        cat: "quant",
+        catName: "Quant RAG",
+        desc: "Hệ thống RAG tài chính chuyên sâu tự động phân tích báo cáo 10-K, 10-Q, so sánh Bảng cân đối kế toán, Báo cáo lưu chuyển tiền tệ qua các quý, bóc tách bảng số liệu phức tạp và cảnh báo rủi ro tài chính của công ty niêm yết.",
+        stack: ["LlamaIndex", "Unstructured", "Vector DB", "FastAPI", "GPT-4o", "Streamlit"]
+    },
+    {
+        num: "DỰ ÁN 11",
+        title: "Forex Grid & Hedging AI Risk Controller (Quản Lý Rủi Ro EA)",
+        cat: "quant",
+        catName: "Quant Risk",
+        desc: "Module AI quản lý rủi ro cho Robot EA: Tự động phân loại thị trường Sideway vs Rõ xu hướng (Trending), tự đóng lệnh Hedging bảo vệ tài khoản khi tin bão ra, tự động khóa lãi trailing-stop theo độ biến động ATR.",
+        stack: ["Python", "MQL5 API", "Scikit-Learn", "FastAPI", "SQLite", "Telegram Bot API"]
+    },
+    {
+        num: "DỰ ÁN 12",
+        title: "Statistical Arbitrage & Pairs Trading AI Scanner",
+        cat: "quant",
+        catName: "Quant Trading",
+        desc: "Quét mối quan hệ đồng tích hợp (Cointegration / Johansen Test) và tính z-score khoảng cách spread giữa các cặp tài sản tương quan (Gold/Silver, EURUSD/GBPUSD) để phát hiện cơ hội giao dịch đảo chiều về giá trị trung bình (Mean Reversion).",
+        stack: ["Statsmodels", "NumPy", "Pandas", "Interactive Brokers API", "Dash/Plotly"]
+    },
+    {
+        num: "DỰ ÁN 13",
+        title: "Financial Fraud & Anti-Money Laundering (AML) Graph AI Engine",
+        cat: "quant",
+        catName: "Quant Security",
+        desc: "Sử dụng Graph Neural Network (PyTorch Geometric) kết hợp XGBoost phân tích đồ thị luồng tiền giao dịch, phát hiện hành vi rửa tiền, tài khoản ảo, và các hành vi thao túng giá (Spoofing, Wash Trading) trên sàn giao dịch.",
+        stack: ["PyTorch Geometric", "XGBoost", "NetworkX", "Neo4j", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 14",
+        title: "Synthetic Financial Time-Series Data Generator (TimeGAN)",
+        cat: "quant",
+        catName: "Quant GenAI",
+        desc: "Mô hình TimeGAN / Diffusion sinh dữ liệu chuỗi thời gian nến giả lập có đặc tính biến động và đuôi béo (Fat-tailed distribution) hệt dữ liệu thật, dùng để thử tải cực hạn (Stress Testing) các hệ thống giao dịch tự động.",
+        stack: ["PyTorch", "TimeGAN", "NumPy", "SciPy", "Matplotlib"]
+    },
+    {
+        num: "DỰ ÁN 15",
+        title: "Credit Risk Scoring & Default Prediction Platform",
+        cat: "quant",
+        catName: "Quant Credit",
+        desc: "Platform chấm điểm tín dụng cá nhân/doanh nghiệp dựa trên lịch sử thanh toán, biến động dòng tiền ngân hàng và mô hình SHAP/LIME để giải thích minh bạch lý do cấp duyệt hoặc từ chối khoản vay.",
+        stack: ["CatBoost", "LightGBM", "SHAP", "FastAPI", "PostgreSQL", "React"]
+    },
+    {
+        num: "DỰ ÁN 16",
+        title: "Volatility Surface & Option Pricing Predictor (PINNs)",
+        cat: "quant",
+        catName: "Quant Derivatives",
+        desc: "Ứng dụng Mạng nơ-ron vật lý (Physics-Informed Neural Networks - PINNs) giải phương trình vi phân Black-Scholes mở rộng để nội suy và dự đoán mặt cong biến động (Implied Volatility Surface) cho giao dịch Quyền chọn.",
+        stack: ["PyTorch", "SciPy", "QuantLib", "NumPy", "Plotly 3D"]
+    },
+    {
+        num: "DỰ ÁN 17",
+        title: "Crypto On-Chain Analytics & Whale Tracking AI Agent",
+        cat: "quant",
+        catName: "Quant Crypto",
+        desc: "Agent theo dõi dòng tiền On-chain trên Ethereum/Solana, phát hiện ví cá voi gom/xả hàng, phân tích giao dịch MEV bot và tự động phát tín hiệu cảnh báo rủi ro biến động giá qua Telegram/Discord.",
+        stack: ["Web3.py", "Etherscan API", "LangGraph", "FastAPI", "Redis", "Telegram API"]
+    },
+    {
+        num: "DỰ ÁN 18",
+        title: "Earnings Call Transcript Audio & Text Multimodal Analyzer",
+        cat: "quant",
+        catName: "Quant Audio",
+        desc: "Phân tích đa phương thức kết hợp âm thanh giọng nói của ban lãnh đạo doanh nghiệp (dùng Whisper phân tích ngữ điệu/ngập ngừng) và văn bản dịch mã để chấm điểm mức độ tự tin/trung thực của CEO/CFO.",
+        stack: ["Whisper", "Librosa", "PyTorch", "GPT-4o Vision/Audio", "FastAPI"]
+    },
+    {
+        num: "DỰ ÁN 19",
+        title: "Automated Trading Backtesting & Walk-Forward Optimization Engine",
+        cat: "quant",
+        catName: "Quant Backtest",
+        desc: "Hệ thống backtest chiến lược tự động chạy trên dữ liệu Tick/M1, tích hợp thuật toán di truyền (Genetic Algorithm) và mô phỏng Monte Carlo để phát hiện và ngăn ngừa hiện tượng quá khớp dữ liệu (Curve-fitting).",
+        stack: ["Backtrader", "DEAP (Genetic)", "NumPy", "Numba (GPU)", "FastAPI", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 20",
+        title: "Multi-Asset High-Frequency Trend Following Bot with Transformer",
+        cat: "quant",
+        catName: "Quant Trading",
+        desc: "Bot giao dịch đa tài sản (Vàng XAUUSD, S&P500, BTCUSD) tích hợp Temporal Fusion Transformer (TFT) dự đoán xu hướng kết hợp tín hiệu lướt sóng Scalping khung M5/M15.",
+        stack: ["PyTorch Forecasting", "MetaTrader 5 API", "Pandas", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 21",
+        title: "Central Bank Policy & Macroeconomic Event Predictive Model",
+        cat: "quant",
+        catName: "Quant Macro",
+        desc: "Mô hình NLP chuyên biệt phân tích biểu quyết và văn bản họp FED (FOMC Minutes), NHNN, ECB để dự báo xác suất thay đổi lãi suất và tác động lên các cặp tỷ giá Forex chính.",
+        stack: ["HuggingFace", "Spacy", "Statsmodels", "FastAPI", "Streamlit"]
+    },
+    {
+        num: "DỰ ÁN 22",
+        title: "Automated Execution Bot & TWAP/VWAP Algorithmic Order Router",
+        cat: "quant",
+        catName: "Quant Execution",
+        desc: "Bot chia nhỏ lệnh khối lượng lớn (Block Trade) thành chuỗi lệnh nhỏ thực thi theo thuật toán TWAP (Time-Weighted) và VWAP (Volume-Weighted) để tránh tác động xấu làm biến động giá thị trường.",
+        stack: ["Python", "FIX Protocol", "CCXT", "FastAPI", "Redis Stream"]
+    },
+    {
+        num: "DỰ ÁN 23",
+        title: "Real-time Order Flow Footprint & Delta Volume Pattern Detector",
+        cat: "quant",
+        catName: "Quant Flow",
+        desc: "Trực quan hóa Footprint Chart, Delta Volume và ứng dụng Computer Vision (YOLOv8) phát hiện mô hình nến đảo chiều hấp thụ (Absorption) và kiệt sức thanh khoản (Exhaustion) tại các vùng hỗ trợ/kháng cự.",
+        stack: ["YOLOv8", "OpenCV", "WebSocket", "PyQt / Web Canvas", "Python"]
+    },
+    {
+        num: "DỰ ÁN 24",
+        title: "Quant Strategy Code Generator Agent (Text to MQL5/PineScript)",
+        cat: "quant",
+        catName: "Quant Agent",
+        desc: "Trợ lý AI nhận yêu cầu bằng lời nói/văn bản tiếng Việt (vd: 'Tạo bot MA20 cắt MA50 kết hợp RSI < 30 trên M15') và tự động biên soạn mã nguồn MQL5 (MetaTrader 5) hoặc PineScript (TradingView) hoàn chỉnh.",
+        stack: ["LangChain", "GPT-4o", "AST Parser", "FastAPI", "Monaco Editor"]
+    },
+    {
+        num: "DỰ ÁN 25",
+        title: "AI Risk-Adjusted Capital Allocation & Dynamic Leverage Manager",
+        cat: "quant",
+        catName: "Quant Risk",
+        desc: "Hệ thống AI tự động điều chỉnh mức đòn bẩy (Leverage 1:10 đến 1:100) và quy mô vị thế theo công thức Kelly Criterion cải tiến dựa trên biến động biến động rủi ro thị trường thời gian thực.",
+        stack: ["Python", "SciPy Optimize", "MetaTrader 5", "FastAPI", "InfluxDB"]
+    },
+
+    // =====================================================================
+    // NHÓM 3: 45 DỰ ÁN AI ENGINEERING THỰC CHUYÊN SÂU KHÁC (NLP, CV, MLOPS)
+    // =====================================================================
+    {
+        num: "DỰ ÁN 26",
+        title: "AI Hybrid Search Engine (BM25 + Vector Search)",
+        cat: "llm",
+        catName: "Search AI",
+        desc: "Công cụ tìm kiếm thông minh kết hợp tìm kiếm từ khóa chính xác BM25 và tìm kiếm ngữ nghĩa Dense Vector, tự động xếp hạng lại kết quả bằng Cross-Encoder Re-ranker.",
+        stack: ["Elasticsearch", "Qdrant", "Cohere Rerank", "FastAPI", "React"]
+    },
+    {
+        num: "DỰ ÁN 27",
+        title: "Customer Support AI Agent with Human-in-the-Loop",
+        cat: "llm",
+        catName: "AI Agent",
+        desc: "Agent chăm sóc khách hàng tự động trả lời thắc mắc, tự tra cứu DB đơn hàng. Khi gặp ca khó hoặc khiếu nại nhạy cảm, Agent tự động tạm dừng và chuyển giao mượt mà cho nhân viên hỗ trợ.",
+        stack: ["LangGraph", "FastAPI", "WebSockets", "PostgreSQL", "Zendesk API"]
+    },
+    {
+        num: "DỰ ÁN 28",
+        title: "Automated Data Quality & Anomaly Detection Pipeline",
+        cat: "platform",
+        catName: "Data AI",
+        desc: "Pipeline tự động kiểm tra chất lượng dữ liệu đầu vào, phát hiện dữ liệu bất thường (Anomaly Detection) trong luồng Kafka streaming và tự động gửi cảnh báo về Slack/Teams.",
+        stack: ["Great Expectations", "PyOD", "Apache Kafka", "FastAPI", "Grafana"]
+    },
+    {
+        num: "DỰ ÁN 29",
+        title: "Real-time Voice AI Assistant (STT + LLM + TTS)",
+        cat: "llm",
+        catName: "Voice AI",
+        desc: "Trợ lý đàm thoại giọng nói thời gian thực với độ trễ thấp (< 800ms). Kết hợp Whisper Speech-to-Text, LLM Streaming và ElevenLabs Text-to-Speech.",
+        stack: ["Whisper", "FastAPI", "WebSockets", "ElevenLabs", "PyAudio"]
+    },
+    {
+        num: "DỰ ÁN 30",
+        title: "Multimodal Document OCR & Invoice Parser",
+        cat: "cv",
+        catName: "Vision & OCR",
+        desc: "Hệ thống trích xuất thông tin hóa đơn, chứng từ scan phức tạp bằng Vision LLM (GPT-4o Vision / Donut) trả về JSON cấu trúc chuẩn mực không sợ lệch dòng.",
+        stack: ["GPT-4o Vision", "pdf2image", "Pydantic", "FastAPI", "React"]
+    },
+    {
+        num: "DỰ ÁN 31",
+        title: "E-commerce Vector Recommendation Engine",
+        cat: "platform",
+        catName: "Recommender",
+        desc: "Hệ thống gợi ý sản phẩm thương mại điện tử kết hợp Lọc cộng tác (Collaborative Filtering) và Embedding tương đồng sản phẩm (Item2Vec / Vector Search).",
+        stack: ["Implicit", "Milvus", "FastAPI", "Redis", "PostgreSQL"]
+    },
+    {
+        num: "DỰ ÁN 32",
+        title: "LLM Observability & Evaluation Platform (LLM-as-a-Judge)",
+        cat: "ops",
+        catName: "LLM Ops",
+        desc: "Nền tảng theo dõi trace log cuộc gọi LLM, tính toán latency, token usage và tự động chấm điểm độ trung thực (Faithfulness) và ảo giác (Hallucination).",
+        stack: ["LangSmith / Langfuse", "Ragas", "FastAPI", "PostgreSQL", "ClickHouse"]
+    },
+    {
+        num: "DỰ ÁN 33",
+        title: "AI Video Summarizer & Scene Search Engine",
+        cat: "cv",
+        catName: "Video AI",
+        desc: "Hệ thống phân tích video YouTube/Mp4, tự động chia cảnh (Scene Detection), dùng Whisper trích xuất lời thoại và CLIP embedding để tìm kiếm phân cảnh video bằng câu hỏi.",
+        stack: ["CLIP", "Whisper", "FFmpeg", "Vector DB", "FastAPI", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 34",
+        title: "Graph RAG System for Knowledge Graph Exploration",
+        cat: "llm",
+        catName: "Graph RAG",
+        desc: "Hệ thống RAG kết hợp Đồ thị kiến thức (Knowledge Graph Neo4j) giúp LLM truy vết các mối quan hệ nhiều chặng phức tạp giữa các đối tượng trong doanh nghiệp.",
+        stack: ["Neo4j", "LangChain", "LlamaIndex", "FastAPI", "GPT-4o"]
+    },
+    {
+        num: "DỰ ÁN 35",
+        title: "Personalized AI Tutor & Exam Generator",
+        cat: "llm",
+        catName: "EdTech AI",
+        desc: "Gia sư AI cá nhân hóa theo lộ trình học viên, tự động sinh đề thi trắc nghiệm kèm giải thích chi tiết và đánh giá điểm yếu của học viên qua từng bài test.",
+        stack: ["FastAPI", "OpenAI API", "Pydantic", "PostgreSQL", "React"]
+    },
+    {
+        num: "DỰ ÁN 36",
+        title: "AI Prompt Injection Guardrail & Security Gateway",
+        cat: "ops",
+        catName: "AI Security",
+        desc: "Gateway bảo mật đứng trước LLM API giúp phát hiện và ngăn chặn các đòn tấn công Prompt Injection, Jailbreak và rò rỉ dữ liệu nhạy cảm PII.",
+        stack: ["Guardrails AI", "FastAPI", "Redis", "Docker", "Regex Rules"]
+    },
+    {
+        num: "DỰ ÁN 37",
+        title: "Semantic Caching & Token Cost Optimizer API",
+        cat: "ops",
+        catName: "AI Cost",
+        desc: "Proxy API giúp tiết kiệm chi phí LLM bằng cách lưu lại bộ nhớ đệm ngữ nghĩa (Semantic Cache), trả về câu trả lời ngay khi gặp câu hỏi tương đồng.",
+        stack: ["Redis Vector Search", "FastAPI", "Sentence-Transformers", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 38",
+        title: "Automated Code Review & Security Scanner Agent",
+        cat: "llm",
+        catName: "DevSecOps",
+        desc: "Agent tự động chạy kiểm tra Pull Request trên GitHub, phát hiện lỗi rò rỉ bộ nhớ, lỗ hổng bảo mật OWASP và đề xuất code sửa ngay trên PR comment.",
+        stack: ["GitHub Actions", "LangChain", "Semgrep", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 39",
+        title: "Smart Contract Auditor & Web3 AI Agent",
+        cat: "llm",
+        catName: "Web3 AI",
+        desc: "Trợ lý AI phân tích mã nguồn Solidity của Smart Contract, phát hiện lỗi Reentrancy, Overflow và mô phỏng giao dịch thử nghiệm an toàn.",
+        stack: ["Slither", "Solidity", "LangGraph", "FastAPI", "React"]
+    },
+    {
+        num: "DỰ ÁN 40",
+        title: "Medical Report Summarizer & Clinical Matching RAG",
+        cat: "llm",
+        catName: "Health AI",
+        desc: "Hệ thống RAG y khoa đọc hiểu hồ sơ bệnh án, tóm tắt chỉ số xét nghiệm và gợi ý danh sách các thử nghiệm lâm sàng (Clinical Trials) phù hợp.",
+        stack: ["MedBERT", "LlamaIndex", "Vector DB", "FastAPI", "Streamlit"]
+    },
+    {
+        num: "DỰ ÁN 41",
+        title: "Automated Content & Social Media Scheduler Agent",
+        cat: "llm",
+        catName: "Marketing AI",
+        desc: "Agent tự động nghiên cứu chủ đề hot trend, viết bài blog SEO, tạo ảnh minh họa (Stable Diffusion) và tự động đặt lịch đăng bài lên Facebook/LinkedIn.",
+        stack: ["CrewAI", "Stable Diffusion", "FastAPI", "Celery", "PostgreSQL"]
+    },
+    {
+        num: "DỰ ÁN 42",
+        title: "SQL Query Generator & NL-to-SQL Business Intelligence",
+        cat: "llm",
+        catName: "NL-to-SQL",
+        desc: "Chuyển đổi câu hỏi tiếng Việt tự nhiên thành câu lệnh SQL chuẩn xác trên cơ sở dữ liệu doanh nghiệp phức tạp và tự vẽ biểu đồ kết quả.",
+        stack: ["Vanna.ai", "FastAPI", "PostgreSQL", "Plotly", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 43",
+        title: "AI Customer Churn Prediction & Retention Dashboard",
+        cat: "platform",
+        catName: "Predictive ML",
+        desc: "Dự đoán xác suất rời bỏ dịch vụ của khách hàng bằng XGBoost, phân tích nguyên nhân bằng SHAP values và gợi ý chương trình chăm sóc phù hợp.",
+        stack: ["XGBoost", "SHAP", "FastAPI", "PostgreSQL", "React"]
+    },
+    {
+        num: "DỰ ÁN 44",
+        title: "Dynamic Price Optimization & Demand Forecasting Engine",
+        cat: "platform",
+        catName: "Forecasting",
+        desc: "Hệ thống dự báo nhu cầu thị trường bằng Prophet/NeuralProphet và đề xuất mức giá bán tối ưu hóa doanh thu theo thời gian thực.",
+        stack: ["Prophet", "PyTorch", "FastAPI", "Redis", "Dash"]
+    },
+    {
+        num: "DỰ ÁN 45",
+        title: "Edge AI Object Detection & Intrusion Alert System",
+        cat: "cv",
+        catName: "Edge Computer Vision",
+        desc: "Hệ thống camera giám sát thông minh chạy mô hình YOLOv8 nén TensorRT trên thiết bị Edge (NVIDIA Jetson) phát hiện xâm nhập trái phép.",
+        stack: ["YOLOv8", "TensorRT", "OpenCV", "C++", "MQTT"]
+    },
+    {
+        num: "DỰ ÁN 46",
+        title: "Automated Podcast/Meeting Transcript Summarizer",
+        cat: "llm",
+        catName: "Speech AI",
+        desc: "Xử lý file âm thanh dài 2 tiếng, dùng Whisper trích xuất hội thoại từng người (Diarization) và LLM tóm tắt các quyết định quan trọng.",
+        stack: ["PyAnnote Audio", "Whisper", "FastAPI", "GPT-4o", "React"]
+    },
+    {
+        num: "DỰ ÁN 47",
+        title: "AI Job Resume Matcher & Interview Practice Agent",
+        cat: "llm",
+        catName: "HR Tech AI",
+        desc: "Hệ thống bóc tách CV (Resume), so khớp độ tương đồng với mô tả công việc (JD) và cho phép ứng viên phỏng vấn thử thoại với AI.",
+        stack: ["FastAPI", "Vector DB", "Whisper", "ElevenLabs", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 48",
+        title: "Federated Learning System for Privacy-Preserving ML",
+        cat: "ops",
+        catName: "Privacy AI",
+        desc: "Hệ thống huấn luyện mô hình ML phân tán trên nhiều thiết bị mà không cần thu gom dữ liệu riêng tư về máy chủ trung tâm.",
+        stack: ["Flower Framework", "PyTorch", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 49",
+        title: "Real-time Fraud Transaction Detection API (Streaming Kafka)",
+        cat: "platform",
+        catName: "Streaming ML",
+        desc: "API phát hiện gian lận thanh toán thẻ ngân hàng thời gian thực xử lý hàng chục ngàn transaction/giây trên luồng Kafka.",
+        stack: ["Apache Kafka", "LightGBM", "Faust", "Redis", "FastAPI"]
+    },
+    {
+        num: "DỰ ÁN 50",
+        title: "Audio Separation & Noise Cancellation AI Pipeline",
+        cat: "cv",
+        catName: "Audio AI",
+        desc: "Mô hình Deep Learning (Demucs / WaveNet) tự động tách lời ca sĩ và nhạc nền, lọc bỏ tiếng ồn môi trường khỏi thu âm.",
+        stack: ["PyTorch", "Demucs", "Librosa", "FastAPI", "Streamlit"]
+    },
+    {
+        num: "DỰ ÁN 51",
+        title: "Personal Knowledge Base & Second Brain AI Integration",
+        cat: "llm",
+        catName: "Productivity AI",
+        desc: "Tích hợp AI trợ lý hỏi đáp vào Obsidian / Notion, hỗ trợ liên kết các ghi chú tự động và truy vấn tri thức cá nhân.",
+        stack: ["LangChain", "ChromaDB", "FastAPI", "Obsidian Plugin"]
+    },
+    {
+        num: "DỰ ÁN 52",
+        title: "Custom Domain LLM Fine-Tuning Pipeline (QLoRA)",
+        cat: "ops",
+        catName: "LLM Fine-Tune",
+        desc: "Pipeline hoàn chỉnh chuẩn bị dữ liệu, fine-tune mô hình Llama-3/DeepSeek bằng QLoRA 4-bit và đóng gói vLLM phục vụ production.",
+        stack: ["Unsloth", "TRL", "PEFT", "vLLM", "Docker", "HuggingFace"]
+    },
+    {
+        num: "DỰ ÁN 53",
+        title: "AI Web Scraping & Structured Data Extraction Agent",
+        cat: "llm",
+        catName: "Web AI",
+        desc: "Agent cào dữ liệu trang web thông minh tự động vượt CAPTCHA, hiểu cấu trúc HTML động bằng Vision/DOM và trả về JSON chuẩn.",
+        stack: ["Playwright", "LangChain", "GPT-4o Vision", "FastAPI"]
+    },
+    {
+        num: "DỰ ÁN 54",
+        title: "Interactive Graph Neural Network (GNN) Ring Detection",
+        cat: "platform",
+        catName: "Graph ML",
+        desc: "Trực quan hóa đồ thị mối quan hệ tài khoản gian lận bằng GNN (GraphSAGE) phát hiện các nhóm tài khoản ảo liên kết chéo.",
+        stack: ["PyTorch Geometric", "D3.js", "Neo4j", "FastAPI"]
+    },
+    {
+        num: "DỰ ÁN 55",
+        title: "Zero-Trust AI Access Control & Data Redaction Gateway",
+        cat: "ops",
+        catName: "AI Security",
+        desc: "Proxy bảo mật tự động làm mờ/che giấu số thẻ ngân hàng, số điện thoại, mật khẩu (Data Masking) trước khi gửi prompt lên Cloud.",
+        stack: ["Presidio", "FastAPI", "Regex", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 56",
+        title: "AI Microservices Pipeline with FastAPI & Kubernetes",
+        cat: "ops",
+        catName: "MLOps",
+        desc: "Hệ thống Microservices AI đóng gói Docker, triển khai trên Kubernetes Helm Chart với khả năng auto-scaling theo tải GPU.",
+        stack: ["Kubernetes", "Docker", "FastAPI", "Prometheus", "Grafana"]
+    },
+    {
+        num: "DỰ ÁN 57",
+        title: "Predictive Maintenance System for IoT Sensor Data",
+        cat: "platform",
+        catName: "IoT ML",
+        desc: "Phân tích dữ liệu cảm biến rung động, nhiệt độ thiết bị công nghiệp để dự báo thời điểm máy hỏng hóc trước 7 ngày.",
+        stack: ["LSTM", "Scikit-Learn", "MQTT", "InfluxDB", "FastAPI"]
+    },
+    {
+        num: "DỰ ÁN 58",
+        title: "Automatic ML Model Converter & ONNX Quantization Hub",
+        cat: "ops",
+        catName: "Model Optim",
+        desc: "Platform tự động chuyển đổi mô hình PyTorch/TensorFlow sang chuẩn ONNX/TensorRT và tối ưu hóa lượng hóa FP16/INT8.",
+        stack: ["ONNX Runtime", "TensorRT", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 59",
+        title: "Neural Style Transfer & Generative Image Editing Web App",
+        cat: "cv",
+        catName: "Generative CV",
+        desc: "Ứng dụng chỉnh sửa ảnh nghệ thuật biến ảnh chụp thành bức tranh sơn dầu hoặc thay đổi phong cách bằng Stable Diffusion Inpainting.",
+        stack: ["Stable Diffusion", "PyTorch", "FastAPI", "React"]
+    },
+    {
+        num: "DỰ ÁN 60",
+        title: "AI Slide Presentation Generator from Markdown/PDF",
+        cat: "llm",
+        catName: "GenAI Docs",
+        desc: "Tự động phân tích tài liệu văn bản thô, tóm tắt ý chính và sinh ra tệp trình chiếu PowerPoint / Marp Slide chuyên nghiệp.",
+        stack: ["python-pptx", "LangChain", "FastAPI", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 61",
+        title: "Multi-Tenant SaaS RAG Platform with Row-Level Security",
+        cat: "llm",
+        catName: "SaaS RAG",
+        desc: "Nền tảng SaaS RAG cho phép nhiều công ty dùng chung nhưng cách ly hoàn toàn dữ liệu tài liệu theo Tenant ID và User Role.",
+        stack: ["FastAPI", "PostgreSQL (RLS)", "PGVector", "Auth0", "React"]
+    },
+    {
+        num: "DỰ ÁN 62",
+        title: "Automated Bug Triage & GitHub Issue Routing Agent",
+        cat: "llm",
+        catName: "Dev AI",
+        desc: "Agent tự động đọc báo cáo lỗi (Bug report) của người dùng trên GitHub, gán nhãn loại lỗi và tự động chỉ định dev phụ trách.",
+        stack: ["LangChain", "GitHub Webhooks", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 63",
+        title: "Self-Healing Infrastructure Agent (DevOps AI Co-Pilot)",
+        cat: "ops",
+        catName: "DevOps AI",
+        desc: "Agent giám sát log hệ thống Linux/K8s. Khi gặp sự cố crash, Agent tự chẩn đoán nguyên nhân và đề xuất lệnh sửa chữa.",
+        stack: ["LangGraph", "Paramiko", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 64",
+        title: "Voice Clone & Text-to-Speech Custom Engine",
+        cat: "cv",
+        catName: "Voice GenAI",
+        desc: "Huấn luyện mô hình nhân bản giọng nói (Voice Cloning) chỉ từ 5 giây mẫu thu âm và phát lại đoạn văn bản tùy chỉnh mượt mà.",
+        stack: ["XTTS-v2", "PyTorch", "FastAPI", "Streamlit"]
+    },
+    {
+        num: "DỰ ÁN 65",
+        title: "Real-time Object Tracking & Traffic Counting CV System",
+        cat: "cv",
+        catName: "Computer Vision",
+        desc: "Hệ thống đến số lượng phương tiện giao thông real-time qua camera street view sử dụng YOLOv8 và thuật toán theo dõi ByteTrack.",
+        stack: ["YOLOv8", "ByteTrack", "OpenCV", "FastAPI", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 66",
+        title: "Cross-Lingual AI Translator with Context Glossary Engine",
+        cat: "llm",
+        catName: "Translation AI",
+        desc: "Hệ thống dịch thuật chuyên ngành thuật ngữ kỹ thuật, cho phép nạp bảng từ điển (Glossary) để giữ nguyên dịch thuật chuẩn xác.",
+        stack: ["FastAPI", "OpenAI API", "Pydantic", "React"]
+    },
+    {
+        num: "DỰ ÁN 67",
+        title: "Automated Testing Suite for LLM Prompt Regression",
+        cat: "ops",
+        catName: "AI Testing",
+        desc: "Bộ công cụ tự động chạy unit test prompt trên Golden Dataset trước mỗi đợt deploy, báo cáo tỷ lệ Pass/Fail chi tiết.",
+        stack: ["pytest", "Promptfoo", "FastAPI", "Docker"]
+    },
+    {
+        num: "DỰ ÁN 68",
+        title: "GenAI Product Mockup & Synthetic Asset Generator",
+        cat: "cv",
+        catName: "GenAI Asset",
+        desc: "Tạo ảnh mockup sản phẩm quảng cáo chuyên nghiệp bằng cách ghép ảnh sản phẩm thô vào bối cảnh do AI sinh ra.",
+        stack: ["Stable Diffusion", "ControlNet", "FastAPI", "React"]
+    },
+    {
+        num: "DỰ ÁN 69",
+        title: "AI Email Triage & Smart Auto-Responder",
+        cat: "llm",
+        catName: "Email AI",
+        desc: "Hệ thống phân loại email hộp thư đến (Quan trọng, Spam, Hỏi giá), tự động dự thảo thư phản hồi chuẩn xác cho nhân viên duyệt.",
+        stack: ["Gmail API", "LangChain", "FastAPI", "Vue"]
+    },
+    {
+        num: "DỰ ÁN 70",
+        title: "AI Agent Swarm for Automated Market Research",
+        cat: "llm",
+        catName: "Agent Swarm",
+        desc: "Bầy đàn AI Agent (Agent Swarm) gồm 5 agent tự động chia nhau cào tin tức đối thủ, tổng hợp báo cáo phân tích SWOT thị trường.",
+        stack: ["CrewAI", "Tavily Search API", "FastAPI", "Streamlit"]
+    }
+];
+
+let currentFilterCategory = 'all';
+
+function renderProjectsList(data) {
+    const container = document.getElementById("projects-list-container");
+    const countText = document.getElementById("projects-count-text");
+    if (!container) return;
+
+    if (!data || data.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">Không tìm thấy dự án phù hợp với từ khóa tìm kiếm.</div>`;
+        if (countText) countText.innerText = "Hiển thị 0 dự án";
+        return;
+    }
+
+    if (countText) {
+        countText.innerText = `Hiển thị ${data.length} / 70 dự án phù hợp`;
+    }
+
+    let html = "";
+    data.forEach(p => {
+        const isQuant = p.cat === "quant";
+        const cardClass = `project-card ${isQuant ? 'quant-card' : ''}`;
+        const catClass = `project-category-badge cat-${p.cat}`;
+
+        const stackTags = p.stack.map(s => `<span class="stack-tag">${s}</span>`).join("");
+
+        html += `
+            <div class="${cardClass}">
+                <div>
+                    <div class="project-top">
+                        <span class="project-num-badge">${p.num}</span>
+                        <span class="${catClass}">${p.catName}</span>
+                    </div>
+                    <div class="project-title">${p.title}</div>
+                    <p class="project-desc">${p.desc}</p>
+                </div>
+                <div class="project-stack">
+                    ${stackTags}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function filterProjects() {
+    const inputEl = document.getElementById("project-search-input");
+    const query = inputEl ? inputEl.value.toLowerCase().trim() : "";
+
+    const filtered = projectsData.filter(p => {
+        const matchCat = (currentFilterCategory === 'all') || (p.cat === currentFilterCategory);
+        const matchQuery = !query || 
+            p.title.toLowerCase().includes(query) || 
+            p.desc.toLowerCase().includes(query) || 
+            p.num.toLowerCase().includes(query) ||
+            p.stack.some(s => s.toLowerCase().includes(query));
+
+        return matchCat && matchQuery;
+    });
+
+    renderProjectsList(filtered);
+}
+
+function setProjectFilter(cat, btn) {
+    currentFilterCategory = cat;
+    document.querySelectorAll(".filter-tag-btn").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    filterProjects();
+}
