@@ -1111,6 +1111,7 @@ const lessonDetails = {
 };
 
 let currentConceptKey = null;
+let currentQuizPage = 1;
 let quizUserAnswers = {}; // { [conceptKey]: { [qIndex]: selectedOptionIndex } }
 let quizSubmittedState = {}; // { [conceptKey]: boolean }
 
@@ -1133,6 +1134,7 @@ function switchModalTab(tabName) {
 
 function openModal(conceptKey) {
     currentConceptKey = conceptKey;
+    currentQuizPage = 1; // Reset về trang 1
     const data = lessonDetails[conceptKey];
     if (!data) return;
 
@@ -1165,6 +1167,18 @@ function openModal(conceptKey) {
     modal.style.display = "flex";
 }
 
+function changeQuizPage(delta) {
+    if (!currentConceptKey) return;
+    const questions = (typeof lessonQuizzes !== "undefined") ? lessonQuizzes[currentConceptKey] : null;
+    if (!questions) return;
+
+    const pageSize = 10;
+    const totalPages = Math.ceil(questions.length / pageSize);
+
+    currentQuizPage = Math.max(1, Math.min(totalPages, currentQuizPage + delta));
+    renderQuiz(currentConceptKey);
+}
+
 function renderQuiz(conceptKey) {
     const container = document.getElementById("quiz-questions-list");
     const bannerTitle = document.getElementById("quiz-banner-title");
@@ -1178,7 +1192,7 @@ function renderQuiz(conceptKey) {
     const lessonInfo = lessonDetails[conceptKey];
 
     if (bannerTitle) {
-        bannerTitle.innerText = `📝 Bài Kiểm Tra Trắc Nghiệm - ${lessonInfo ? lessonInfo.title : conceptKey}`;
+        bannerTitle.innerText = `📝 Bài Kiểm Tra Trắc Nghiệm (${questions ? questions.length : 20} Câu) - ${lessonInfo ? lessonInfo.title : conceptKey}`;
     }
 
     if (!questions || questions.length === 0) {
@@ -1195,14 +1209,34 @@ function renderQuiz(conceptKey) {
     const userAns = quizUserAnswers[conceptKey];
     const isSubmitted = !!quizSubmittedState[conceptKey];
 
-    let html = "";
-    questions.forEach((q, qIdx) => {
+    const pageSize = 10;
+    const totalPages = Math.ceil(questions.length / pageSize);
+    if (currentQuizPage > totalPages) currentQuizPage = totalPages;
+    if (currentQuizPage < 1) currentQuizPage = 1;
+
+    const startIndex = (currentQuizPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, questions.length);
+    const pageQuestions = questions.slice(startIndex, endIndex);
+
+    // Xây dựng thanh phân trang (Pagination Bar)
+    const paginationHtml = `
+        <div class="quiz-pagination-bar" style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.6); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+            <button class="btn btn-sm" style="background: rgba(255,255,255,0.1); padding: 5px 12px; font-size: 11px; color: #f1f5f9; cursor: pointer; border: none; border-radius: 4px;" ${currentQuizPage === 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} onclick="changeQuizPage(-1)">⬅ Trang trước</button>
+            <span style="font-size: 11.5px; font-weight: 600; color: #38bdf8;">Trang ${currentQuizPage} / ${totalPages} (Câu ${startIndex + 1} - ${endIndex})</span>
+            <button class="btn btn-sm" style="background: rgba(255,255,255,0.1); padding: 5px 12px; font-size: 11px; color: #f1f5f9; cursor: pointer; border: none; border-radius: 4px;" ${currentQuizPage === totalPages ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} onclick="changeQuizPage(1)">Trang sau ➡</button>
+        </div>
+    `;
+
+    let html = paginationHtml;
+
+    pageQuestions.forEach((q, relativeIdx) => {
+        const qIdx = startIndex + relativeIdx;
         const userChoice = userAns[qIdx];
 
         html += `
             <div class="quiz-question-card" id="quiz-qcard-${qIdx}">
                 <div class="quiz-q-title">
-                    <span class="quiz-q-num">Câu ${qIdx + 1}/10</span>
+                    <span class="quiz-q-num">Câu ${qIdx + 1}/${questions.length}</span>
                     ${q.q}
                 </div>
                 <div class="quiz-options-grid">
@@ -1251,6 +1285,8 @@ function renderQuiz(conceptKey) {
         html += `</div>`;
     });
 
+    html += paginationHtml;
+
     container.innerHTML = html;
 
     // Cập nhật nút bấm và Score Badge
@@ -1270,8 +1306,8 @@ function renderQuiz(conceptKey) {
             scoreBadge.style.display = "inline-flex";
             scoreBadge.className = `quiz-result-badge-card ${isPass ? "quiz-result-pass" : "quiz-result-fail"}`;
             scoreBadge.innerHTML = isPass
-                ? `<span>🎉 ĐẠT: ${score}/10 (${pct}%)</span>`
-                : `<span>❌ CHƯA ĐẠT: ${score}/10 (${pct}%) - Cần ≥80%</span>`;
+                ? `<span>🎉 ĐẠT: ${score}/${questions.length} (${pct}%)</span>`
+                : `<span>❌ CHƯA ĐẠT: ${score}/${questions.length} (${pct}%) - Cần ≥80% (${Math.ceil(questions.length * 0.8)} câu)</span>`;
         }
     } else {
         if (submitBtn) submitBtn.style.display = "inline-flex";
@@ -1300,7 +1336,7 @@ function submitQuiz() {
     const answeredCount = Object.keys(userAns).length;
 
     if (answeredCount < questions.length) {
-        const confirmSubmit = confirm(`Bạn chưa trả lời hết 10 câu hỏi (Mới trả lời ${answeredCount}/10 câu).\n\nBạn có chắc chắn muốn nộp bài & chấm điểm ngay không?`);
+        const confirmSubmit = confirm(`Bạn chưa trả lời hết ${questions.length} câu hỏi (Mới trả lời ${answeredCount}/${questions.length} câu).\n\nBạn có chắc chắn muốn nộp bài & chấm điểm ngay không?`);
         if (!confirmSubmit) return;
     }
 
@@ -1312,6 +1348,7 @@ function retryQuiz() {
     if (!currentConceptKey) return;
     quizUserAnswers[currentConceptKey] = {};
     quizSubmittedState[currentConceptKey] = false;
+    currentQuizPage = 1;
     renderQuiz(currentConceptKey);
 }
 
