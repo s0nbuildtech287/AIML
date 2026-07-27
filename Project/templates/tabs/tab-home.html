@@ -82,6 +82,23 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
 
+    .concept-card.completed {
+        border-color: #10b981 !important;
+        background: rgba(16, 185, 129, 0.08) !important;
+        position: relative;
+    }
+
+    .concept-card.completed .concept-title {
+        color: #34d399 !important;
+    }
+
+    .concept-card.completed .concept-title::before {
+        content: "✓ ";
+        color: #34d399;
+        font-weight: 800;
+        margin-right: 2px;
+    }
+
     .concept-title {
         font-weight: 600;
         font-size: 10.5px;
@@ -746,6 +763,10 @@
             <div class="modal-info-block">
                 <h3>📊 Sơ đồ luồng kiến thức</h3>
                 <div id="modal-diagram" class="modal-diagram-box"></div>
+            </div>
+            <div class="modal-info-block">
+                <h3>🔑 Tóm lại điều cần nhớ (Phỏng vấn Keypoints)</h3>
+                <div id="modal-summary" style="font-size: 11.5px; color: #cbd5e1; line-height: 1.6; background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; border-radius: 6px; padding: 12px 14px; white-space: pre-wrap;"></div>
             </div>
         </div>
 
