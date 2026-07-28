@@ -43,6 +43,9 @@ Mỗi bài học lý thuyết sẽ đi kèm với việc mở rộng mã nguồn
   + Vẽ số tương tác: Khung vẽ canvas cho phép người dùng dùng chuột vẽ các chữ số từ 0 đến 9.
   + Dự đoán bằng CNN PyTorch: Gửi nét vẽ về backend xử lý qua mạng tích chập và trả lời nhãn dự đoán.
   + Trực quan hóa mạng Neuron: Vẽ sơ đồ các lớp liên kết của mạng neuron nhân tạo. Các nút mạng (node) và đường truyền sẽ sáng lên dựa vào giá trị activation thực tế khi chạy Forward pass.
+  + [/] Bổ sung câu hỏi trắc nghiệm cho 35 bài học còn lại vào `quiz_data.js`
+  + [ ] Sửa đổi/vô hiệu hóa cơ chế auto-padding ở cuối `quiz_data.js`
+  + [ ] Xác thực tính đúng đắn của mã nguồn JavaScript và chạy ứng dụng web để kiểm tra
 
 ### Giai đoạn 4: Động cơ LLM & Hệ thống RAG (Bài 16 - 22)
 * Tab tích hợp: Knowledge RAG Chatbot
